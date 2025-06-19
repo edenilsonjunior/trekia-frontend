@@ -5,6 +5,9 @@
     name: "light";
     default: true;
     --color-primary: #F07868;
+    --color-primary-content: white;
     --color-secondary: #FEA189;
-    --color-base-100: #F2F0EB
+    --color-secondary-content: white;
+    --color-base-100: #F2F0EB;
+    --radius-box: 24px;
 }
