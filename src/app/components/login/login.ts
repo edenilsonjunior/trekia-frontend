@@ -2,11 +2,11 @@ import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 @Component({
-  selector: 'app-home',
+  selector: 'app-login',
   imports: [RouterLink],
-  templateUrl: './home.html',
-  styleUrl: './home.scss'
+  templateUrl: './login.html',
+  styleUrl: './login.scss'
 })
-export class Home {
+export class Login {
 
 }
