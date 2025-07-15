@@ -5,7 +5,7 @@ import { Login } from './components/login/login';
 import { Register } from './components/register/register';
 import { MainLayout } from './pages/layouts/main-layout/main-layout';
 import { Dashboard } from './components/dashboard/dashboard';
-import { Travel } from './components/travel/travel';
+import { Trip } from './components/trip/trip';
 import { Roadmap } from './components/roadmap/roadmap';
 import { authGuardGuard } from './guards/auth-guard-guard';
 
@@ -28,8 +28,8 @@ export const routes: Routes = [
     component: MainLayout,
     children: [
       { path: 'dashboard', component: Dashboard, canActivate: [authGuardGuard] },
-      { path: 'travels', component: Travel, canActivate: [authGuardGuard] },
-      { path: 'roadmaps', component: Roadmap, canActivate: [authGuardGuard] }
+      { path: 'trip', component: Trip, canActivate: [authGuardGuard] },
+      { path: 'roadmap', component: Roadmap, canActivate: [authGuardGuard] }
     ]
   }
 ];
