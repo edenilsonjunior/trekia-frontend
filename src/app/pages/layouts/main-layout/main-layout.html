@@ -55,8 +55,8 @@
         <ul>
             <li>
                 <a
-                routerLink="/login"
-                class="block h-[42px] px-4 flex items-center text-white text-lg font-medium rounded-xl hover:bg-[#EBBFBF] mt-2"
+                class="block h-[42px] px-4 flex items-center text-white text-lg font-medium rounded-xl hover:bg-[#EBBFBF] mt-2 cursor-pointer"
+                (click)="logout()"
                 >
                 Sair
                 </a>
@@ -65,3 +65,10 @@
     </div>
 
 </aside>
+
+<div class="w-[80%] ml-[20%]">
+    <div class="p-10">
+        <router-outlet></router-outlet>
+    </div>
+</div>
+

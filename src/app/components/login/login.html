@@ -1,19 +1,38 @@
 <section class="flex flex-col justify-center items-center w-full">
     <img src="assets/trekia-orange-logo.png" alt="trekia-orange-logo" class="w-3/6">
 
-    <form class="w-full flex flex-col justify-between">
+    <form [formGroup]="formLogin" (ngSubmit)="onSubmit()" class="w-full flex flex-col justify-between">
         <fieldset class="fieldset flex flex-col justify-start w-full">
-            <legend class="fieldset-legend text-base text-[#253C59]">Email</legend>
-            <input type="email" class="input w-full bg-white placeholder-[#253C59] text-[#253C59]" placeholder="Digite seu email" id="email"/>
+          <legend class="fieldset-legend text-base text-[#253C59]">Email</legend>
+          <input type="email" formControlName="email" class="input w-full bg-white placeholder-[#253C59] text-[#253C59]" placeholder="Digite seu email" />
+          @if (
+                (formLogin.get('email')?.invalid && 
+                formLogin.get('email')?.touched) ||
+                (alertAll)
+            ) {
+                <p class="text-red-700">Preencha o campo de email corretamente.</p>
+            }
         </fieldset>
-    
-        <fieldset class="fieldset flex flex-col justify-start w-full mt-1">
-            <legend class="fieldset-legend text-base text-[#253C59]">Senha</legend>
-            <input type="password" class="input w-full bg-white placeholder-[#253C59] text-[#253C59]" placeholder="Digite sua senha" id="senha"/>
+        
+        <fieldset class="fieldset flex flex-col justify-start w-full mt-1 mb-8">
+          <legend class="fieldset-legend text-base text-[#253C59]">Senha</legend>
+          <input type="password" formControlName="password" class="input w-full bg-white placeholder-[#253C59] text-[#253C59]" placeholder="Digite sua senha" />
+          @if (
+                (formLogin.get('password')?.invalid && 
+                formLogin.get('password')?.touched) ||
+                (alertAll)
+            ) {
+                <p class="text-red-700">Preencha o campo de senha corretamente.</p>
+            }
         </fieldset>
-    
-        <button class="btn btn-primary mt-10 px-6 font-medium text-lg" type="submit">Entrar</button>
+
+        @if (alertAll) {
+            <p class="text-red-700 text-sm text-center mb-4">Email ou Senha inválidos preencha novamente os campos.</p>
+        }
+        
+        <button class="btn btn-primary px-6 font-medium text-lg" type="submit">Entrar</button>
     </form>
+    
     
     <p class="text-[#253C59] mt-2">Não possui uma conta? <a routerLink="/register" class="text-primary underline">Registrar</a></p>
 </section>

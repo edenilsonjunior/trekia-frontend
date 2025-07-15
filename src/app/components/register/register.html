@@ -1,24 +1,72 @@
 <section class="flex flex-col justify-center items-center w-full">
     <img src="assets/trekia-orange-logo.png" alt="trekia-orange-logo" class="w-3/6">
 
-    <form class="w-full flex flex-col justify-between">
+    <form [formGroup]="formRegister" (ngSubmit)="onSubmit()" class="w-full flex flex-col justify-between">
         <fieldset class="fieldset flex flex-col justify-start w-full">
-            <legend class="fieldset-legend text-base text-[#253C59]">Nome</legend>
-            <input type="text" class="input w-full bg-white placeholder-[#253C59] text-[#253C59]" placeholder="Digite seu nome" id="nome"/>
+          <legend class="fieldset-legend text-base text-[#253C59]">Nome</legend>
+          <input
+            type="text"
+            formControlName="name"
+            class="input w-full bg-white placeholder-[#253C59] text-[#253C59]"
+            placeholder="Digite seu nome"
+          />
+          @if (
+            (formRegister.get('name')?.invalid && formRegister.get('name')?.touched) ||
+            alertAll
+          ) {
+            <p class="text-red-700">Preencha o campo de nome corretamente.</p>
+          }
         </fieldset>
+      
+        <fieldset class="fieldset flex flex-col justify-start w-full mt-1">
+          <legend class="fieldset-legend text-base text-[#253C59]">Email</legend>
+          <input
+            type="email"
+            formControlName="email"
+            class="input w-full bg-white placeholder-[#253C59] text-[#253C59]"
+            placeholder="Digite seu email"
+          />
+          @if (
+            (formRegister.get('email')?.invalid && formRegister.get('email')?.touched) ||
+            alertAll
+          ) {
+            <p class="text-red-700">Preencha o campo de email corretamente.</p>
+          }
+        </fieldset>
+      
+        <fieldset class="fieldset flex flex-col justify-start w-full mt-1 mb-8">
+          <legend class="fieldset-legend text-base text-[#253C59]">Senha</legend>
+          <input
+            type="password"
+            formControlName="password"
+            class="input w-full bg-white placeholder-[#253C59] text-[#253C59]"
+            placeholder="Digite sua senha"
+          />
+          @if (
+            (formRegister.get('password')?.invalid && formRegister.get('password')?.touched) ||
+            alertAll
+          ) {
+            <p class="text-red-700">Preencha o campo de senha corretamente.</p>
+          }
+        </fieldset>
+      
+        @if (alertAll) {
+          <p class="text-red-700 text-sm text-center mb-4">
+            Os dados preenchidos são inválidos, por favor verifique e tente novamente.
+          </p>
+        }
 
-        <fieldset class="fieldset flex flex-col justify-start w-full mt-1">
-            <legend class="fieldset-legend text-base text-[#253C59]">Email</legend>
-            <input type="email" class="input w-full bg-white placeholder-[#253C59] text-[#253C59]" placeholder="Digite seu email" id="email"/>
-        </fieldset>
-    
-        <fieldset class="fieldset flex flex-col justify-start w-full mt-1">
-            <legend class="fieldset-legend text-base text-[#253C59]">Senha</legend>
-            <input type="password" class="input w-full bg-white placeholder-[#253C59] text-[#253C59]" placeholder="Digite sua senha" id="senha"/>
-        </fieldset>
-    
-        <button class="btn btn-primary mt-10 px-6 font-medium text-lg" type="submit">Registrar</button>
-    </form>
+        @if (existingUser) {
+          <p class="text-red-700 text-sm text-center mb-4">
+            Usuário já cadastrado, por favor verifique e tente novamente.
+          </p>
+        }
+      
+        <button class="btn btn-primary px-6 font-medium text-lg" type="submit">
+          Registrar
+        </button>
+      </form>
+      
     
     <p class="text-[#253C59] mt-2">Já possui uma conta? <a routerLink="/login" class="text-primary underline">Entrar</a></p>
 </section>
