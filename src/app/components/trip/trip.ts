@@ -1,22 +1,33 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { CommonModule, formatDate } from '@angular/common';
+import { DashboardService } from '../../services/dashboard-service';
+import { DashboardTrip } from '../../models/dashboard/dashboardTrip';
 import { TripService } from '../../services/trip-service';
-import { TripRequest } from '../../models/trip';
-import { formatDate } from '@angular/common';
+import { forkJoin } from 'rxjs';
+import { concatMap, finalize } from 'rxjs/operators';
+import { CreateTripRequest } from '../../models/trips/createTripRequest';
+
+import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-trip',
-  imports: [ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './trip.html',
   styleUrl: './trip.scss'
 })
-export class Trip {
+export class Trip implements OnInit {
 
   alertAll = false;
   formTrip: FormGroup;
+  trips: DashboardTrip[] = [];
+  selectedTripIds: number[] = [];
 
-  constructor (
-    private tripService: TripService
+  constructor(
+    private dashboardService: DashboardService,
+    private tripService: TripService,
+    private router: Router
   ) {
     this.formTrip = new FormGroup({
       title: new FormControl('', [Validators.required]),
@@ -26,31 +37,81 @@ export class Trip {
     });
   }
 
+  ngOnInit(): void {
+    this.loadTrips();
+  }
+
+  loadTrips() {
+    this.dashboardService.getTripsByUserId().subscribe({
+      next: (trips) => {
+        this.trips = trips;
+      },
+      error: (err) => {
+        this.trips = [];
+      }
+    });
+  }
+
   onSubmit() {
     if (this.formTrip.valid) {
-      const trip: TripRequest = {
+      const trip: CreateTripRequest = {
         title: this.formTrip.value.title,
         description: this.formTrip.value.description,
         startDate: formatDate(this.formTrip.value.startDate, 'dd/MM/yyyy', 'en-US'),
         endDate: formatDate(this.formTrip.value.endDate, 'dd/MM/yyyy', 'en-US')
       };
-      this.tripService.create(trip).subscribe({
+
+      if (new Date(trip.endDate) < new Date(trip.startDate)) {
+        this.alertAll = true;
+        return;
+      }
+
+      this.tripService.createTrip(trip).subscribe({
         next: (response) => {
-          if (response.status === 201) {
-            console.log("ok", response.body);
-          }
+
+          this.loadTrips();
+          this.formTrip.reset();
+
+          const modal = document.getElementById('my_modal_3') as HTMLDialogElement;
+          if (modal) modal.close();
+
         },
         error: (error) => {
-          this.formTrip.reset()
           this.alertAll = true;
-
-          console.error('Erro ao fazer login', error);
-        },
-        complete: () => this.formTrip.reset()
+          console.error('Erro ao criar viagem', error);
+        }
       });
     } else {
       this.alertAll = true;
     }
   }
 
+  toggleTripSelection(tripId: number, event: Event) {
+    const checked = (event.target as HTMLInputElement).checked;
+    if (checked) {
+      if (!this.selectedTripIds.includes(tripId)) {
+        this.selectedTripIds.push(tripId);
+      }
+    } else {
+      this.selectedTripIds = this.selectedTripIds.filter(id => id !== tripId);
+    }
+  }
+
+  deleteSelectedTrips() {
+    if (this.selectedTripIds.length === 0) return;
+
+    this.tripService.deleteTrips(this.selectedTripIds).subscribe({
+      next: () => {
+        this.loadTrips();
+        this.selectedTripIds = [];
+      },
+      error: (err) => {
+        console.error('Erro ao excluir viagens', err);
+      }
+    });
+  }
+
+  goToTripDetail(tripId: number) {
+    this.router.navigate(['/trips', tripId]);
+  }
 }

@@ -1,8 +1,8 @@
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { TripRequest } from '../models/trip';
-import { ScheduleRequest } from '../models/schedule';
+import { CreateTripRequest } from '../models/trips/createTripRequest';
+import { Trip } from '../models/trips/trip';
 
 
 @Injectable({
@@ -14,16 +14,26 @@ export class TripService {
 
   constructor(private http: HttpClient) { }
 
-  public create(trip: TripRequest): Observable<HttpResponse<TripRequest>> {
-    return this.http.post<TripRequest>(`${this.apiUrl}/register`, trip, {
+  public createTrip(trip: CreateTripRequest): Observable<HttpResponse<Trip>> {
+    return this.http.post<Trip>(`${this.apiUrl}`, trip, {
       observe: 'response'
     });
   }
 
-  public createSchedule(trip: ScheduleRequest): Observable<HttpResponse<ScheduleRequest>> {
-    return this.http.post<ScheduleRequest>(`${this.apiUrl}/register`, trip, {
-      observe: 'response'
-    });
+  public getTripById(id: number): Observable<{ data: Trip }> {
+    return this.http.get<{ data: Trip }>(`${this.apiUrl}/${id}`);
   }
 
+  public updateTrip(id: number, updateTripRequest: any): Observable<Trip> {
+    return this.http.put<Trip>(`${this.apiUrl}/${id}`, updateTripRequest);
+  }
+
+  public deleteTrip(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  }
+
+  public deleteTrips(ids: number[]): Observable<any> {
+    const params = ids.map(id => `ids=${id}`).join('&');
+    return this.http.delete(`${this.apiUrl}/batch?${params}`);
+  }
 }

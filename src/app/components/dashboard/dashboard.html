@@ -1,124 +1,28 @@
 <h1 class="text-3xl font-medium text-[#253C59]">Minhas Viagens</h1>
 
-<section class="flex gap-8 py-6">
-    <div class="card bg-base-100 w-96 h-96 shadow-sm">
-        <figure>
-          <img
-            src="https://turisnews.com.br/wp-content/uploads/2025/07/8f.jpg"
-            alt="img_card" class="object-cover"/>
-        </figure>
-        <div class="card-body">
-          <h2 class="card-title text-2xl text-[#253C59]">
-            Viagem para o Rio de Janeiro
-          </h2>
-          <p>Viagem com amigos para conhecer os principais pontos turísticos do Rio de Janeiro</p>
-          <div class="card-actions justify-end">
-            <div class="badge badge-outline badge-primary">11/11/2026 até 26/11/2026</div>
-          </div>
-        </div>
+<section class="flex flex-col gap-8 py-6">
+  <div class="bg-[#F7F6F3] rounded-2xl flex flex-row items-stretch p-6 gap-6 shadow-sm w-full">
+    <!-- Imagem + Info -->
+    <div class="flex flex-col items-center justify-center w-1/3 max-w-[300px] min-w-[220px]">
+      <img [src]="tripCard.mediaBase64 ? 'data:image/jpeg;base64,' + tripCard.mediaBase64 : 'assets/destino.png'"
+        alt="Destino"
+        class="rounded-xl object-cover w-[230px] h-[180px] mb-2 border border-gray-200" />
+      <div class="text-[20px] font-semibold text-[#253C59] mb-1 text-center leading-none">
+        {{ tripCard.title }}
+      </div>
+      <div class="text-xs text-[#888] font-medium text-center leading-none">
+        {{ tripCard.startDate | date:'dd/MM/yyyy' }} - {{ tripCard.endDate | date:'dd/MM/yyyy' }}
+      </div>
     </div>
-    
-    <div class="card bg-base-100 w-96 h-96 shadow-sm">
-        <figure>
-          <img
-            src="https://turisnews.com.br/wp-content/uploads/2025/07/8f.jpg"
-            alt="img_card" class="object-cover"/>
-        </figure>
-        <div class="card-body">
-          <h2 class="card-title">
-            Viagem para o Rio de Janeiro
-          </h2>
-          <p>Viagem com amigos para conhecer os principais pontos turísticos do Rio de Janeiro</p>
-          <div class="card-actions justify-end">
-            <div class="badge badge-outline badge-primary">11/11/2026 até 26/11/2026</div>
-          </div>
-        </div>
+    <!-- Mapa -->
+    <div class="flex-1 h-[260px] relative rounded-xl overflow-hidden shadow">
+      <app-trip-map [schedules]="tripCard.schedules"></app-trip-map>
     </div>
+  </div>
 </section>
 
-<h1 class="text-3xl font-medium text-[#253C59]">Utilitários</h1>
-
+<h1 class="text-3xl font-medium text-[#253C59] mt-6">Utilitários</h1>
 <section class="flex gap-8 pt-6">
-    <div class="card card-side bg-base-100 shadow-sm">
-      <figure>
-        <img
-          src="assets/sun-vector.png"
-          alt="sun" class="object-cover w-64"/>
-      </figure>
-      <div class="card-body flex justify-between ">
-        <div>
-          <label class="input">
-            <svg class="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-              <g
-                stroke-linejoin="round"
-                stroke-linecap="round"
-                stroke-width="2.5"
-                fill="none"
-                stroke="currentColor"
-              >
-                <circle cx="11" cy="11" r="8"></circle>
-                <path d="m21 21-4.3-4.3"></path>
-              </g>
-            </svg>
-            <input type="search" class="grow" placeholder="Escolha um local" />
-          </label>
-        </div>
-        <div class="self-center">
-          <h2 class="font-semibold text-2xl text-[#253C59] mb-2">
-            Rio de Janeiro
-          </h2>
-          <div class="font-semibold text-3xl text-[#253C59] flex justify-between">
-            <p class="text-start">30 °C</p>
-            <p class="text-end">19 °C</p>
-          </div>
-        </div>
-        <div class="card-actions justify-end">
-          <button class="btn btn-primary">Pesquisar</button>
-        </div>
-      </div>
-    </div>
-
-      <div class="card card-side bg-base-100 shadow-sm">
-        <figure>
-          <img
-            src="assets/money-vector.png"
-            alt="money" class="object-cover w-64"/>
-        </figure>
-        <div class="card-body flex justify-between ">
-          <div>
-            <label class="input">
-              <svg class="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                <g
-                  stroke-linejoin="round"
-                  stroke-linecap="round"
-                  stroke-width="2.5"
-                  fill="none"
-                  stroke="currentColor"
-                >
-                  <circle cx="11" cy="11" r="8"></circle>
-                  <path d="m21 21-4.3-4.3"></path>
-                </g>
-              </svg>
-              <input type="search" class="grow" placeholder="Escolha uma moeda" />
-            </label>
-          </div>
-          <div class="self-center w-full">
-            <div class="flex flex-col items-center w-full gap-2">
-              <input type="text" placeholder="Digite um valor" class="input" />
-              <svg class="w-8" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                <g id="SVGRepo_iconCarrier"> 
-                  <path d="M21 7.5L8 7.5M21 7.5L16.6667 3M21 7.5L16.6667 12" stroke="#F07868" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> 
-                  <path d="M4 16.5L17 16.5M4 16.5L8.33333 21M4 16.5L8.33333 12" stroke="#F07868" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> 
-                </g>
-              </svg>
-              <input type="text" placeholder="Digite um valor" class="input" />
-            </div>
-          </div>
-          <div class="card-actions justify-end">
-            <button class="btn btn-primary">Pesquisar</button>
-          </div>
-        </div>
-      </div>
+  <app-weather-card></app-weather-card>
+  <app-currency-card></app-currency-card>
 </section>
-

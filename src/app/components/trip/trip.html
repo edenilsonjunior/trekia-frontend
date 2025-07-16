@@ -1,29 +1,40 @@
 <h1 class="text-3xl font-medium text-[#253C59]">Viagens</h1>
 
 <div class="flex justify-end gap-4">
-    <button class="btn btn-primary flex justify-center"> 
-      Excluir Viagens 
-      <svg class="w-6" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-        <g id="SVGRepo_iconCarrier"> 
-          <path d="M18 6L17.1991 18.0129C17.129 19.065 17.0939 19.5911 16.8667 19.99C16.6666 20.3412 16.3648 20.6235 16.0011 20.7998C15.588 21 15.0607 21 14.0062 21H9.99377C8.93927 21 8.41202 21 7.99889 20.7998C7.63517 20.6235 7.33339 20.3412 7.13332 19.99C6.90607 19.5911 6.871 19.065 6.80086 18.0129L6 6M4 6H20M16 6L15.7294 5.18807C15.4671 4.40125 15.3359 4.00784 15.0927 3.71698C14.8779 3.46013 14.6021 3.26132 14.2905 3.13878C13.9376 3 13.523 3 12.6936 3H11.3064C10.477 3 10.0624 3 9.70951 3.13878C9.39792 3.26132 9.12208 3.46013 8.90729 3.71698C8.66405 4.00784 8.53292 4.40125 8.27064 5.18807L8 6M14 10V17M10 10V17" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> 
+  <button class="btn btn-primary flex justify-center" (click)="deleteSelectedTrips()"
+    [disabled]="selectedTripIds.length === 0">
+    Excluir Viagens
+    <svg class="w-6" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+      <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+      <g id="SVGRepo_iconCarrier">
+        <path
+          d="M18 6L17.1991 18.0129C17.129 19.065 17.0939 19.5911 16.8667 19.99C16.6666 20.3412 16.3648 20.6235 16.0011 20.7998C15.588 21 15.0607 21 14.0062 21H9.99377C8.93927 21 8.41202 21 7.99889 20.7998C7.63517 20.6235 7.33339 20.3412 7.13332 19.99C6.90607 19.5911 6.871 19.065 6.80086 18.0129L6 6M4 6H20M16 6L15.7294 5.18807C15.4671 4.40125 15.3359 4.00784 15.0927 3.71698C14.8779 3.46013 14.6021 3.26132 14.2905 3.13878C13.9376 3 13.523 3 12.6936 3H11.3064C10.477 3 10.0624 3 9.70951 3.13878C9.39792 3.26132 9.12208 3.46013 8.90729 3.71698C8.66405 4.00784 8.53292 4.40125 8.27064 5.18807L8 6M14 10V17M10 10V17"
+          stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+      </g>
+    </svg>
+  </button>
+  <button class="btn btn-primary flex justify-center" onclick="my_modal_3.showModal()">
+    Adicionar Viagem
+    <svg class="w-6" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+      <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+      <g id="SVGRepo_iconCarrier">
+        <g id="Edit / Add_Plus">
+          <path id="Vector" d="M6 12H12M12 12H18M12 12V18M12 12V6" stroke="#ffffff" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round"></path>
         </g>
-      </svg>
-    </button>
-    <button class="btn btn-primary flex justify-center" onclick="my_modal_3.showModal()">
-      Adicionar Viagem
-      <svg class="w-6" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-          <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-          <g id="SVGRepo_iconCarrier"> 
-            <g id="Edit / Add_Plus"> 
-              <path id="Vector" d="M6 12H12M12 12H18M12 12V18M12 12V6" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> 
-            </g> 
-          </g>
-      </svg>
-    </button>
+      </g>
+    </svg>
+  </button>
 </div>
+
+<h1 class="text-3xl font-medium text-[#253C59]">
+  Viagens
+  <span class="text-base font-normal text-[#253C59] ml-2">
+    ({{ selectedTripIds.length }} selecionada{{ selectedTripIds.length === 1 ? '' : 's' }})
+  </span>
+</h1>
 
 <dialog id="my_modal_3" class="modal">
   <div class="modal-box">
@@ -34,19 +45,23 @@
     <form [formGroup]="formTrip" (ngSubmit)="onSubmit()">
       <fieldset class="fieldset flex flex-col justify-start w-full my-1">
         <legend class="fieldset-legend text-base text-[#253C59]">Título</legend>
-        <input type="text" formControlName="title" class="input w-full bg-white placeholder-[#253C59] text-[#253C59]" placeholder="Digite um título" />
+        <input type="text" formControlName="title" class="input w-full bg-white placeholder-[#253C59] text-[#253C59]"
+          placeholder="Digite um título" />
       </fieldset>
       <fieldset class="fieldset flex flex-col justify-start w-full my-1">
         <legend class="fieldset-legend text-base text-[#253C59]">Descrição</legend>
-        <input type="text" formControlName="description" class="input w-full bg-white placeholder-[#253C59] text-[#253C59]" placeholder="Digite uma descrição" />
+        <input type="text" formControlName="description"
+          class="input w-full bg-white placeholder-[#253C59] text-[#253C59]" placeholder="Digite uma descrição" />
       </fieldset>
       <fieldset class="fieldset flex flex-col justify-start w-full my-1">
         <legend class="fieldset-legend text-base text-[#253C59]">Data de Chegada</legend>
-        <input type="date" formControlName="startDate" class="input w-full bg-white placeholder-[#253C59] text-[#253C59]" />
+        <input type="date" formControlName="startDate"
+          class="input w-full bg-white placeholder-[#253C59] text-[#253C59]" />
       </fieldset>
       <fieldset class="fieldset flex flex-col justify-start w-full my-1">
         <legend class="fieldset-legend text-base text-[#253C59]">Data de Saída</legend>
-        <input type="date" formControlName="endDate" class="input w-full bg-white placeholder-[#253C59] text-[#253C59]" />
+        <input type="date" formControlName="endDate"
+          class="input w-full bg-white placeholder-[#253C59] text-[#253C59]" />
       </fieldset>
 
       <button class="btn btn-primary px-6 font-medium text-lg w-full mt-4" type="submit">Enviar</button>
@@ -55,87 +70,45 @@
 </dialog>
 
 <div class="overflow-x-auto py-6">
-    <table class="table">
-      <!-- head -->
-      <thead>
-        <tr>
-          <th></th>
-          <th class="text-lg font-bold text-[#253C59]">Título</th>
-          <th class="text-lg font-bold text-[#253C59]">Descrição</th>
-          <th class="text-lg font-bold text-[#253C59]">Data de Chegada</th>
-          <th class="text-lg font-bold text-[#253C59]">Data de Saída</th>
-          <th class="text-lg font-bold text-[#253C59]">Data de Criação</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- row 1 -->
-        <tr>
-          <th>
-            <label>
-              <input type="checkbox" class="checkbox" />
-            </label>
-          </th>
-          <td>
-            <p class="text-md font-semibold text-[#253C59]">Viagem para o Rio de Janeiro</p>
-          </td>
-          <td>
-            <p class="text-md font-semibold text-[#253C59]">Viagem com amigos para conhecer os principais pontos turísticos do Rio de Janeiro</p>
-          </td>
-          <td>
-            <p class="text-md font-semibold text-[#253C59]">11/11/2026</p>
-          </td>
-          <th>
-            <p class="text-md font-semibold text-[#253C59]">26/11/2026</p>
-          </th>
-          <th>
-            <p class="text-md font-semibold text-[#253C59]">15/07/2025 - 17:15</p>
-          </th>
-        </tr>
-        <tr>
-          <th>
-            <label>
-              <input type="checkbox" class="checkbox" />
-            </label>
-          </th>
-          <td>
-            <p class="text-md font-semibold text-[#253C59]">Viagem para o Rio de Janeiro</p>
-          </td>
-          <td>
-            <p class="text-md font-semibold text-[#253C59]">Viagem com amigos para conhecer os principais pontos turísticos do Rio de Janeiro</p>
-          </td>
-          <td>
-            <p class="text-md font-semibold text-[#253C59]">11/11/2026</p>
-          </td>
-          <th>
-            <p class="text-md font-semibold text-[#253C59]">26/11/2026</p>
-          </th>
-          <th>
-            <p class="text-md font-semibold text-[#253C59]">15/07/2025 - 17:15</p>
-          </th>
-        </tr>
-        <tr>
-          <th>
-            <label>
-              <input type="checkbox" class="checkbox" />
-            </label>
-          </th>
-          <td>
-            <p class="text-md font-semibold text-[#253C59]">Viagem para o Rio de Janeiro</p>
-          </td>
-          <td>
-            <p class="text-md font-semibold text-[#253C59]">Viagem com amigos para conhecer os principais pontos turísticos do Rio de Janeiro</p>
-          </td>
-          <td>
-            <p class="text-md font-semibold text-[#253C59]">11/11/2026</p>
-          </td>
-          <th>
-            <p class="text-md font-semibold text-[#253C59]">26/11/2026</p>
-          </th>
-          <th>
-            <p class="text-md font-semibold text-[#253C59]">15/07/2025 - 17:15</p>
-          </th>
-        </tr>
-      </tbody> 
-    </table>
+  <table class="table">
+    
+    <thead>
+      <tr>
+        <th></th>
+        <th class="text-lg font-bold text-[#253C59]">Título</th>
+        <th class="text-lg font-bold text-[#253C59]">Descrição</th>
+        <th class="text-lg font-bold text-[#253C59]">Data de Chegada</th>
+        <th class="text-lg font-bold text-[#253C59]">Data de Saída</th>
+        <th class="text-lg font-bold text-[#253C59]">Data de Criação</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let trip of trips">
+        <th>
+          <label>
+            <input type="checkbox" class="checkbox" [checked]="selectedTripIds.includes(trip.id)"
+              (change)="toggleTripSelection(trip.id, $event)" />
+          </label>
+        </th>
+        <td>
+          <p class="text-md font-semibold text-[#253C59] cursor-pointer transition hover:underline hover:text-[#7b54fa]"
+            (click)="goToTripDetail(trip.id)">
+            {{ trip.title }}
+          </p>
+        <td>
+          <p class="text-md font-semibold text-[#253C59]">{{ trip.description }}</p>
+        </td>
+        <td>
+          <p class="text-md font-semibold text-[#253C59]">{{ trip.startDate | date:'dd/MM/yyyy' }}</p>
+        </td>
+        <td>
+          <p class="text-md font-semibold text-[#253C59]">{{ trip.endDate | date:'dd/MM/yyyy' }}</p>
+        </td>
+        <td>
+          <p class="text-md font-semibold text-[#253C59]">{{ trip.createdAt | date:'dd/MM/yyyy' }}</p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 </div>

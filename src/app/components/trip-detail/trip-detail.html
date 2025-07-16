@@ -1,0 +1,112 @@
+<div *ngIf="trip">
+  <div class="flex justify-between items-center mb-6">
+    <div>
+      <h1 class="text-3xl font-bold text-[#253C59] mb-2">{{ trip.title }}</h1>
+      <p class="text-lg text-[#253C59] mb-2">{{ trip.description }}</p>
+      <div class="flex flex-col gap-1 text-[#253C59] text-base">
+        <div>
+          <span class="font-semibold">Data de Chegada:</span>
+          {{ trip.startDate }}
+        </div>
+        <div>
+          <span class="font-semibold">Data de Saída:</span>
+          {{ trip.endDate }}
+        </div>
+      </div>
+    </div>
+    <div class="flex justify-end gap-4">
+      <button class="btn btn-primary flex justify-center" (click)="openEditTripModal()">
+        Editar
+      </button>
+      <button class="btn btn-primary flex justify-center" (click)="deleteTrip()">
+        Excluir
+      </button>
+    </div>
+  </div>
+
+
+
+  <!-- Carrossel de Fotos -->
+  <div class="mt-12">
+    <div class="flex items-center justify-between mb-4">
+      <h2 class="text-xl font-semibold text-[#253C59]">Fotos da viagem</h2>
+      <button class="btn btn-primary flex items-center gap-2" (click)="openUploadModal()">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+        </svg>
+        Enviar foto
+      </button>
+    </div>
+
+    <div *ngIf="tripMedias?.length; else noPhotos">
+      <div class="flex overflow-x-auto gap-4 pb-2">
+        <div *ngFor="let media of tripMedias"
+          class="min-w-[220px] rounded-xl shadow p-2 bg-white flex flex-col items-center">
+          <img [src]="media.url" alt="Foto da viagem" class="w-[200px] h-[140px] object-cover rounded-xl mb-1" />
+          <button class="btn btn-xs btn-error mt-1" (click)="deletePhoto(media.id)">
+            Excluir
+          </button>
+        </div>
+      </div>
+    </div>
+    <ng-template #noPhotos>
+      <p class="text-[#253C59] text-base opacity-70">Nenhuma foto enviada ainda.</p>
+    </ng-template>
+  </div>
+
+
+
+
+
+
+
+  <!-- Modal para edição -->
+  <dialog id="edit_trip_modal" class="modal">
+    <div class="modal-box">
+      <button type="button" class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+        (click)="closeEditTripModal()">
+        ✕
+      </button>
+      <h3 class="text-xl font-bold text-[#253C59] mb-2">Edite sua viagem</h3>
+      <form [formGroup]="formTrip" (ngSubmit)="editTrip()">
+        <fieldset class="fieldset flex flex-col justify-start w-full my-1">
+          <legend class="fieldset-legend text-base text-[#253C59]">Título</legend>
+          <input type="text" formControlName="title" maxlength="30"
+            class="input w-full bg-white placeholder-[#253C59] text-[#253C59]" placeholder="Digite um título" />
+        </fieldset>
+        <fieldset class="fieldset flex flex-col justify-start w-full my-1">
+          <legend class="fieldset-legend text-base text-[#253C59]">Descrição</legend>
+          <input type="text" formControlName="description" maxlength="120"
+            class="input w-full bg-white placeholder-[#253C59] text-[#253C59]" placeholder="Digite uma descrição" />
+        </fieldset>
+        <fieldset class="fieldset flex flex-col justify-start w-full my-1">
+          <legend class="fieldset-legend text-base text-[#253C59]">Data de Chegada</legend>
+          <input type="date" formControlName="startDate"
+            class="input w-full bg-white placeholder-[#253C59] text-[#253C59]" />
+        </fieldset>
+        <fieldset class="fieldset flex flex-col justify-start w-full my-1">
+          <legend class="fieldset-legend text-base text-[#253C59]">Data de Saída</legend>
+          <input type="date" formControlName="endDate"
+            class="input w-full bg-white placeholder-[#253C59] text-[#253C59]" />
+        </fieldset>
+        <button class="btn btn-primary px-6 font-medium text-lg w-full mt-4" type="submit"
+          [disabled]="formTrip.invalid || formTrip.pristine">
+          Enviar
+        </button>
+      </form>
+    </div>
+  </dialog>
+
+  <!-- Modal Upload -->
+  <dialog id="upload_photo_modal" class="modal">
+    <div class="modal-box flex flex-col items-center">
+      <button type="button" class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" (click)="closeUploadModal()">
+        ✕
+      </button>
+      <h3 class="text-lg font-bold text-[#253C59] mb-4">Enviar foto</h3>
+      <input type="file" accept="image/*" class="mb-4" (change)="uploadPhoto($event)" [disabled]="uploading" />
+      <div *ngIf="uploading" class="text-[#253C59]">Enviando foto...</div>
+    </div>
+  </dialog>
+
+</div>

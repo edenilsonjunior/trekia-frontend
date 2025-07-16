@@ -1,0 +1,33 @@
+<div class="flex bg-white rounded-2xl shadow-sm h-[230px] min-w-[410px]">
+  <div class="flex items-center justify-center bg-[#63A6F7] w-[170px] h-full rounded-l-2xl">
+    <img src="assets/sun-vector.png" alt="sun" class="w-24 h-24" />
+  </div>
+  <div class="flex flex-col justify-center flex-1 px-8">
+    <div class="flex items-center gap-2 mb-2">
+      <svg class="h-5 w-5 opacity-50" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <circle cx="11" cy="11" r="8" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M21 21l-4.3-4.3" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <input
+        type="search"
+        [(ngModel)]="query"
+        (keyup.enter)="searchWeather()"
+        class="bg-[#F4F2EE] rounded px-2 py-1 text-sm outline-none w-40"
+        placeholder="Escolha um local"
+      />
+    </div>
+    <h2 class="font-semibold text-xl text-[#253C59] mb-2">{{ city }}</h2>
+    <div class="font-semibold text-2xl text-[#253C59] flex gap-4" *ngIf="!error">
+      <span>{{ tempMax ?? '--' }}&nbsp;°C</span>
+      <span>{{ tempMin ?? '--' }}&nbsp;°C</span>
+    </div>
+    <div class="text-sm text-red-500 my-2" *ngIf="error">{{ error }}</div>
+    <button
+      class="bg-[#F07868] hover:bg-[#d85d4d] text-white px-4 py-1 rounded-lg mt-4 w-fit self-end text-sm shadow"
+      (click)="searchWeather()"
+      [disabled]="loading"
+    >
+      {{ loading ? 'Buscando...' : 'Pesquisar' }}
+    </button>
+  </div>
+</div>

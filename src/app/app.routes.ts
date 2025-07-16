@@ -8,6 +8,7 @@ import { Dashboard } from './components/dashboard/dashboard';
 import { Trip } from './components/trip/trip';
 import { authGuardGuard } from './guards/auth-guard-guard';
 import { Schedule } from './components/schedule/schedule';
+import { TripDetail } from './components/trip-detail/trip-detail';
 
 export const routes: Routes = [
   {
@@ -28,8 +29,9 @@ export const routes: Routes = [
     component: MainLayout,
     children: [
       { path: 'dashboard', component: Dashboard, canActivate: [authGuardGuard] },
-      { path: 'trip', component: Trip, canActivate: [authGuardGuard] },
-      { path: 'schedule', component: Schedule, canActivate: [authGuardGuard] }
+      { path: 'trips', component: Trip, canActivate: [authGuardGuard] },
+      { path: 'schedule', component: Schedule, canActivate: [authGuardGuard] },
+      { path: 'trips/:id', component: TripDetail, canActivate: [authGuardGuard] }
     ]
   }
 ];
