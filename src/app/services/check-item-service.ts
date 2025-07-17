@@ -13,10 +13,10 @@ export class CheckItemService {
 
   constructor(private http: HttpClient) { }
 
-  getCheckItemsByTripId(tripId: number): Observable<CheckItem[]> {
+  getCheckItemsByTripId(tripId: number): Observable<{ data: CheckItem[] }> {
 
     const url = `${this.apiUrl}/${tripId}/check-items`;
-    return this.http.get<CheckItem[]>(url);
+    return this.http.get<{ data: CheckItem[] }>(url);
   }
 
   createCheckItem(tripId: number, item: CreateCheckItemRequest): Observable<HttpResponse<any>> {

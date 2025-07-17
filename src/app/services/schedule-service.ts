@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Schedule } from '../components/schedule/schedule';
+import { Schedule } from '../models/schedules/schedule';
 
 @Injectable({
     providedIn: 'root'
@@ -12,8 +12,8 @@ export class ScheduleService {
 
     constructor(private http: HttpClient) { }
 
-    getSchedulesByTripId(tripId: number): Observable<Schedule[]> {
-        return this.http.get<Schedule[]>(`${this.apiUrl}/${tripId}/schedules`);
+    getSchedulesByTripId(tripId: number): Observable<{ data: Schedule[] }> {
+        return this.http.get<{ data: Schedule[] }>(`${this.apiUrl}/${tripId}/schedules`);
     }
 
     getSchedulesById(tripId: number, scheduleId: number): Observable<Schedule> {

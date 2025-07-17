@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 
 @Component({
@@ -7,13 +7,22 @@ import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/rou
   templateUrl: './main-layout.html',
   styleUrl: './main-layout.scss'
 })
-export class MainLayout {
+export class MainLayout implements OnInit {
 
-  constructor (private router: Router) { }
-  
-  logout(): void {
-    localStorage.removeItem('authToken');
-    this.router.navigate(['/login']); 
+  userName: string = '';
+  userEmail: string = '';
+
+  constructor(private router: Router) { }
+
+  ngOnInit(): void {
+    this.userName = localStorage.getItem('userName') || '';
+    this.userEmail = localStorage.getItem('userEmail') || '';
   }
 
+  logout(): void {
+    localStorage.removeItem('authToken');
+    localStorage.removeItem('userName');
+    localStorage.removeItem('userEmail');
+    this.router.navigate(['/login']);
+  }
 }

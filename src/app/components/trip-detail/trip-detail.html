@@ -15,7 +15,7 @@
       </div>
     </div>
     <div class="flex justify-end gap-4">
-      <button class="btn btn-primary flex justify-center" (click)="openEditTripModal()">
+      <button class="btn btn-primary flex justify-center" (click)="openUpdateTripModal()">
         Editar
       </button>
       <button class="btn btn-primary flex justify-center" (click)="deleteTrip()">
@@ -25,6 +25,48 @@
   </div>
 
 
+  <div class="flex gap-4 mb-10">
+
+    <div class="w-[30%] bg-white rounded-2xl shadow flex flex-col p-6 gap-2 h-[370px] min-h-[370px] max-h-[370px]">
+      <h3 class="text-xl font-semibold text-[#253C59] mb-3">Checkitems</h3>
+
+      <form (ngSubmit)="createCheckItem()" class="flex items-center gap-2 mb-2">
+        <input [(ngModel)]="newCheckItemDescription" name="newCheckItemDescription"
+          class="rounded-full px-4 py-2 bg-[#F7F6F3] focus:bg-white border border-[#E3E0DD] flex-1 outline-none text-[#253C59]"
+          placeholder="Adicionar tarefa..." maxlength="80" required autocomplete="off" />
+        <button type="submit" class="btn btn-primary px-6 py-2" [disabled]="!newCheckItemDescription.trim()">
+          Adicionar
+        </button>
+      </form>
+
+
+      <div class="flex flex-col gap-1 overflow-y-auto max-h-[220px] pr-1">
+        <div *ngFor="let item of checkItems" class="flex items-center gap-2 group">
+          <label class="flex items-center cursor-pointer">
+            <input type="checkbox" class="form-checkbox w-5 h-5 rounded-full accent-[#FEA189] transition"
+              [checked]="item.isChecked" (change)="toggleCheckItem(item)" />
+          </label>
+          <span class="flex-1 text-md font-medium text-[#253C59] transition"
+            [ngClass]="{'line-through text-gray-400': item.isChecked}">
+            {{ item.description }}
+          </span>
+          <button type="button"
+            class="text-gray-400 hover:text-red-500 ml-2 opacity-0 group-hover:opacity-100 transition"
+            (click)="deleteCheckItem(item)" title="Excluir">
+            ✕
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 70% - Mapa -->
+    <div class="w-[70%] bg-white rounded-xl shadow p-4 flex flex-col">
+      <h3 class="text-lg font-semibold text-[#253C59] mb-2">Mapa da viagem</h3>
+      <div class="flex-1 h-[260px] relative rounded-xl overflow-hidden shadow">
+        <app-trip-map [schedules]="schedules"></app-trip-map>
+      </div>
+    </div>
+  </div>
 
   <!-- Carrossel de Fotos -->
   <div class="mt-12">
@@ -42,8 +84,10 @@
       <div class="flex overflow-x-auto gap-4 pb-2">
         <div *ngFor="let media of tripMedias"
           class="min-w-[220px] rounded-xl shadow p-2 bg-white flex flex-col items-center">
-          <img [src]="media.url" alt="Foto da viagem" class="w-[200px] h-[140px] object-cover rounded-xl mb-1" />
-          <button class="btn btn-xs btn-error mt-1" (click)="deletePhoto(media.id)">
+          <img [src]="'data:image/jpeg;base64,' + media.media" alt="Foto da viagem"
+            class="w-[200px] h-[140px] object-cover rounded-xl mb-1" />
+          <p class="text-sm text-[#253C59]">{{ media.description }}</p>
+          <button class="btn btn-xs btn-error mt-1" (click)="deleteTripMedia(media.id)">
             Excluir
           </button>
         </div>
@@ -54,21 +98,15 @@
     </ng-template>
   </div>
 
-
-
-
-
-
-
   <!-- Modal para edição -->
   <dialog id="edit_trip_modal" class="modal">
     <div class="modal-box">
       <button type="button" class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
-        (click)="closeEditTripModal()">
+        (click)="closeUpdateTripModal()">
         ✕
       </button>
       <h3 class="text-xl font-bold text-[#253C59] mb-2">Edite sua viagem</h3>
-      <form [formGroup]="formTrip" (ngSubmit)="editTrip()">
+      <form [formGroup]="formTrip" (ngSubmit)="updateTrip()">
         <fieldset class="fieldset flex flex-col justify-start w-full my-1">
           <legend class="fieldset-legend text-base text-[#253C59]">Título</legend>
           <input type="text" formControlName="title" maxlength="30"
@@ -104,8 +142,20 @@
         ✕
       </button>
       <h3 class="text-lg font-bold text-[#253C59] mb-4">Enviar foto</h3>
-      <input type="file" accept="image/*" class="mb-4" (change)="uploadPhoto($event)" [disabled]="uploading" />
-      <div *ngIf="uploading" class="text-[#253C59]">Enviando foto...</div>
+      <input type="file" accept="image/*" class="mb-4" (change)="onFileSelected($event)" [disabled]="uploading" />
+
+      <input type="text" [(ngModel)]="uploadDescription" placeholder="Informe uma descrição da foto"
+        class="input w-full mb-2" [disabled]="uploading" name="description" required maxlength="120" />
+
+      <!-- Preview da foto, opcional -->
+      <img *ngIf="previewUrl" [src]="previewUrl" alt="Preview"
+        class="w-[200px] h-[140px] object-cover rounded-xl mb-2 border" />
+
+      <button class="btn btn-primary w-full" [disabled]="!selectedFile || !uploadDescription || uploading"
+        (click)="createTripMedia()">
+        Enviar
+      </button>
+      <div *ngIf="uploading" class="text-[#253C59] mt-2">Enviando foto...</div>
     </div>
   </dialog>
 

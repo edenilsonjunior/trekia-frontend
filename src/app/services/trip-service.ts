@@ -24,8 +24,8 @@ export class TripService {
     return this.http.get<{ data: Trip }>(`${this.apiUrl}/${id}`);
   }
 
-  public updateTrip(id: number, updateTripRequest: any): Observable<Trip> {
-    return this.http.put<Trip>(`${this.apiUrl}/${id}`, updateTripRequest);
+  public UpdateTrip(id: number, UpdateTripRequest: any): Observable<Trip> {
+    return this.http.put<Trip>(`${this.apiUrl}/${id}`, UpdateTripRequest);
   }
 
   public deleteTrip(id: number): Observable<void> {

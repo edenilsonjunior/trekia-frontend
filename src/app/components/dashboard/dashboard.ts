@@ -47,9 +47,4 @@ export class Dashboard implements OnInit {
       this.selectedTripIndex = (this.selectedTripIndex + 1) % this.trips.length;
     }
   }
-
-  criarRoteiro(tripId: number) {
-    // Pode navegar para /roteiros/new, abrir modal, etc
-    console.log('Criar roteiro para tripId:', tripId);
-  }
 }

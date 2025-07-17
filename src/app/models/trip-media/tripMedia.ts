@@ -1,5 +1,5 @@
 export type TripMedia = {
   id: number;
-  mediaBase64: string;
+  media: string;
   description: string;
 }

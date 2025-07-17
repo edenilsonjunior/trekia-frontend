@@ -31,8 +31,11 @@ export class Login {
   
       this.userService.login(user).subscribe({
         next: (response) => {
-          const token = response.data.token;
-          localStorage.setItem('authToken', token);
+          const user = response.data;
+
+          localStorage.setItem('authToken', user.token ?? '');
+          localStorage.setItem('userName', user.name);
+          localStorage.setItem('userEmail', user.email);
 
           this.router.navigate(['/dashboard']);
         },
