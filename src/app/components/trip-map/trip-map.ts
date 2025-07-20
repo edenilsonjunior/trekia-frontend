@@ -31,7 +31,7 @@ export class TripMapComponent implements AfterViewInit, OnChanges {
   private initMap() {
 
     const options = {
-      zoomControl: false,
+      zoomControl: true,
       dragging: true,
       scrollWheelZoom: true,
       doubleClickZoom: true,
@@ -97,4 +97,5 @@ export class TripMapComponent implements AfterViewInit, OnChanges {
       this.map!.setView([this.schedules[0].latitude, this.schedules[0].longitude], 13);
     }
   }
+
 }

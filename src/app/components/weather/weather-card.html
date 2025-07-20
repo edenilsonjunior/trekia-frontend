@@ -1,33 +1,41 @@
-<div class="flex bg-white rounded-2xl shadow-sm h-[230px] min-w-[410px]">
-  <div class="flex items-center justify-center bg-[#63A6F7] w-[170px] h-full rounded-l-2xl">
-    <img src="assets/sun-vector.png" alt="sun" class="w-24 h-24" />
+<div class="flex bg-white rounded-2xl shadow-sm w-128 h-80">
+  <div class="w-2/5 h-full">
+    <img src="assets/weather-image.png" alt="weather-image" class="object-cover w-full h-full rounded-l-2xl" />
   </div>
-  <div class="flex flex-col justify-center flex-1 px-8">
-    <div class="flex items-center gap-2 mb-2">
-      <svg class="h-5 w-5 opacity-50" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-        <circle cx="11" cy="11" r="8" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M21 21l-4.3-4.3" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-      <input
-        type="search"
-        [(ngModel)]="query"
-        (keyup.enter)="searchWeather()"
-        class="bg-[#F4F2EE] rounded px-2 py-1 text-sm outline-none w-40"
-        placeholder="Escolha um local"
-      />
-    </div>
-    <h2 class="font-semibold text-xl text-[#253C59] mb-2">{{ city }}</h2>
-    <div class="font-semibold text-2xl text-[#253C59] flex gap-4" *ngIf="!error">
-      <span>{{ tempMax ?? '--' }}&nbsp;°C</span>
-      <span>{{ tempMin ?? '--' }}&nbsp;°C</span>
-    </div>
-    <div class="text-sm text-red-500 my-2" *ngIf="error">{{ error }}</div>
-    <button
-      class="bg-[#F07868] hover:bg-[#d85d4d] text-white px-4 py-1 rounded-lg mt-4 w-fit self-end text-sm shadow"
-      (click)="searchWeather()"
-      [disabled]="loading"
-    >
-      {{ loading ? 'Buscando...' : 'Pesquisar' }}
-    </button>
+  <div class="w-3/5 p-6 h-full">
+    <div class="flex flex-col h-full justify-between">
+      <h2 class="text-xl font-semibold text-[#253C59]">Previsão do Tempo</h2>
+      <div class="flex items-center">
+        <label class="input bg-white">
+          <svg class="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <g
+              stroke-linejoin="round"
+              stroke-linecap="round"
+              stroke-width="2.5"
+              fill="none"
+              stroke="currentColor"
+            >
+              <circle cx="11" cy="11" r="8"></circle>
+              <path d="m21 21-4.3-4.3"></path>
+            </g>
+          </svg>
+          <input type="search" [(ngModel)]="query" (keyup.enter)="searchWeather()" class="grow text-[#253C59] placeholder:text-[#253C59]" placeholder="Escolha um local" />
+        </label>
+      </div>
+      <div class="self-center items-center">
+        <h2 class="font-semibold text-center text-xl text-[#253C59] mb-2">{{ city }}</h2>
+        <div class="font-semibold text-center text-3xl text-[#253C59] flex gap-4" *ngIf="!error">
+          <span>{{ tempMax || '--' }}&nbsp;°C</span>
+          <span>{{ tempMin || '--' }}&nbsp;°C</span>
+        </div>
+        <div class="text-sm text-red-500 my-2" *ngIf="error">{{ error }}</div>
+      </div>
+      <button
+        class="bg-[#F07868] hover:bg-[#d85d4d] text-white px-4 py-1 rounded-lg w-fit self-end text-sm shadow"
+        (click)="searchWeather()"
+        [disabled]="loading"
+      >
+        {{ loading ? 'Pesquisando...' : 'Pesquisar' }}
+      </button>
   </div>
 </div>

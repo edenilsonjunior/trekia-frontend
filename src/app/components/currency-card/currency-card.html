@@ -1,48 +1,43 @@
-<div class="flex bg-white rounded-2xl shadow-sm min-w-[410px] p-8 flex-col gap-3">
-  <!-- Title -->
-  <h2 class="text-xl font-semibold text-[#253C59] mb-3">Cotação de Moeda</h2>
+<div class="flex flex-col justify-between bg-white rounded-2xl shadow-sm w-128 p-6 h-80 gap-2">
 
-  <div class="flex items-center gap-2 mb-1">
-    <!-- From Currency Select -->
-    <select
-      [(ngModel)]="fromCurrency"
-      class="bg-[#F4F2EE] rounded px-2 py-1 text-sm outline-none w-full"
-    >
-      <option value="" disabled selected>Escolha uma moeda</option>
-      <option *ngFor="let option of currencyOptions" [value]="option.code">
-        {{ option.code }} - {{ option.label }}
-      </option>
-    </select>
+  <h2 class="text-xl font-semibold text-[#253C59]">Cotação de Moeda</h2>
+
+  <div class="flex flex-col gap-2">
+    <div class="flex items-center">
+      <fieldset class="flex flex-col justify-start w-full">
+        <select class="select w-full bg-white text-[#253C59]" [(ngModel)]="fromCurrency">
+          <option value="" selected>Selecione uma moeda</option>
+          <option *ngFor="let option of currencyOptions" [value]="option.code">
+            {{ option.code }} - {{ option.label }}
+          </option>
+        </select>
+      </fieldset>
+    </div>
+    <div class="flex justify-center">
+      <svg class="w-6" viewBox="0 0 24 24" fill="none">
+        <path d="M21 7.5L8 7.5M21 7.5L16.6667 3M21 7.5L16.6667 12" stroke="#F07868" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+        <path d="M4 16.5L17 16.5M4 16.5L8.33333 21M4 16.5L8.33333 12" stroke="#F07868" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+      </svg>
+    </div>
+    <div class="flex items-center">
+      <fieldset class="flex flex-col justify-start w-full">
+        <select class="select w-full bg-white text-[#253C59]" [(ngModel)]="toCurrency">
+          <option value="" selected>Selecione uma moeda</option>
+          <option *ngFor="let option of currencyOptions" [value]="option.code">
+            {{ option.code }} - {{ option.label }}
+          </option>
+        </select>
+      </fieldset>
+    </div>
+    <input type="text" [value]="result" placeholder="Cotação" class="input w-full bg-white text-[#253C59] disabled:font-semibold  disabled:text-[#253C59]" disabled/>
   </div>
-  <div class="flex justify-center">
-    <svg class="w-8" viewBox="0 0 24 24" fill="none">
-      <path d="M21 7.5L8 7.5M21 7.5L16.6667 3M21 7.5L16.6667 12" stroke="#F07868" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-      <path d="M4 16.5L17 16.5M4 16.5L8.33333 21M4 16.5L8.33333 12" stroke="#F07868" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-    </svg>
+  
+  <div class="flex justify-end items-center gap-2">
+    <div *ngIf="error" class="text-red-500 text-xs">{{ error }}</div>
+    <button (click)="search()" [disabled]="loading || !fromCurrency || !toCurrency"
+      class="bg-[#F07868] hover:bg-[#d85d4d] text-white px-4 py-1 rounded-lg w-fit self-end text-sm shadow">
+      {{ loading ? 'Pesquisando...' : 'Pesquisar' }}
+    </button>
   </div>
-  <div class="flex items-center gap-2 mb-1">
-    <!-- To Currency Select -->
-    <select
-      [(ngModel)]="toCurrency"
-      class="bg-[#F4F2EE] rounded px-2 py-1 text-sm outline-none w-full"
-    >
-      <option value="" disabled selected>Escolha uma moeda</option>
-      <option *ngFor="let option of currencyOptions" [value]="option.code">
-        {{ option.code }} - {{ option.label }}
-      </option>
-    </select>
-  </div>
-  <!-- Result -->
-  <input
-    type="text"
-    [value]="result"
-    readonly
-    class="bg-[#F4F2EE] rounded px-2 py-1 text-sm outline-none mb-2 w-40"
-    placeholder="Cotação"
-  />
-  <button (click)="search()" [disabled]="loading || !fromCurrency || !toCurrency"
-    class="bg-[#F07868] hover:bg-[#d85d4d] text-white px-4 py-1 rounded-lg mt-2 w-fit self-end text-sm shadow">
-    {{ loading ? 'Pesquisando...' : 'Pesquisar' }}
-  </button>
-  <div *ngIf="error" class="text-red-500 text-xs mt-2">{{ error }}</div>
+
 </div>
