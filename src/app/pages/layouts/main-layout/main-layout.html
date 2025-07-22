@@ -1,4 +1,4 @@
-<aside class="h-screen w-[20%] bg-secondary fixed inset-y-0 left-0 p-8 flex flex-col justify-between">
+<aside class="h-screen w-1/5 bg-secondary fixed inset-y-0 left-0 p-8 flex flex-col justify-between">
 
     <div>
         <div class="flex justify-center">
@@ -7,10 +7,10 @@
     
         <div>
             <hr class="text-white my-4">
-            <div class="flex items-center gap-4 mb-4">
-                <img src="assets/avatar-home-22.png" alt="avatar-home-22" class="rounded-full w-16">
-                <div>
-                  <p class="text-white text-lg font-medium">{{ userName }}</p>
+            <div class="flex flex-col 2xl:flex-row items-center gap-1 2xl:gap-4 px-4">
+                <img src="assets/avatar-home-22.png" alt="avatar-home-22" class="rounded-full w-12">
+                <div class="px-4 2xl:px-0">
+                  <p class="text-white text-center 2xl:text-start text-lg font-medium">{{ userName }}</p>
                   <p class="text-white opacity-75 text-sm font-medium">{{ userEmail }}</p>
                 </div>
             </div>
@@ -66,7 +66,7 @@
 
 </aside>
 
-<div class="w-[80%] ml-[20%]">
+<div class="w-4/5 ml-[20%]">
     <div class="p-10">
         <router-outlet></router-outlet>
     </div>

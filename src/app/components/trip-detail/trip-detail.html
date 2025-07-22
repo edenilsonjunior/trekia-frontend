@@ -2,14 +2,14 @@
   <div class="flex justify-between items-center mb-6">
     <div>
       <h1 class="text-3xl font-bold text-[#253C59] mb-2">{{ trip.title }}</h1>
-      <p class="text-lg text-[#253C59] mb-2">{{ trip.description }}</p>
+      <p class="text-xl text-[#253C59] mb-2">{{ trip.description }}</p>
       <div class="flex flex-col gap-1 text-[#253C59] text-base">
         <div>
-          <span class="font-semibold">Data de Chegada:</span>
+          <span class="font-semibold text-xl">Data de Chegada:</span>
           {{ trip.startDate }}
         </div>
         <div>
-          <span class="font-semibold">Data de Saída:</span>
+          <span class="font-semibold text-xl">Data de Saída:</span>
           {{ trip.endDate }}
         </div>
       </div>
@@ -24,22 +24,22 @@
     </div>
   </div>
 
-
   <div class="flex gap-4 mb-10">
 
     <div class="w-[30%] bg-white rounded-2xl shadow flex flex-col p-6 gap-2 h-[370px] min-h-[370px] max-h-[370px]">
       <h3 class="text-xl font-semibold text-[#253C59] mb-3">Checkitems</h3>
 
       <form (ngSubmit)="createCheckItem()" class="flex items-center gap-2 mb-2">
-        <input [(ngModel)]="newCheckItemDescription" name="newCheckItemDescription"
-          class="rounded-full px-4 py-2 bg-[#F7F6F3] focus:bg-white border border-[#E3E0DD] flex-1 outline-none text-[#253C59]"
-          placeholder="Adicionar tarefa..." maxlength="80" required autocomplete="off" />
+        <label class="input bg-white">
+          <input type="search" [(ngModel)]="newCheckItemDescription" name="newCheckItemDescription"
+          class="grow text-[#253C59] placeholder:text-[#253C59]" placeholder="Adicione uma Tarefa" 
+          required autocomplete="off" maxlength="80"/>
+        </label>
         <button type="submit" class="btn btn-primary px-6 py-2" [disabled]="!newCheckItemDescription.trim()">
           Adicionar
         </button>
       </form>
-
-
+ 
       <div class="flex flex-col gap-1 overflow-y-auto max-h-[220px] pr-1">
         <div *ngFor="let item of checkItems" class="flex items-center gap-2 group">
           <label class="flex items-center cursor-pointer">
@@ -61,7 +61,7 @@
 
     <!-- Card 70% - Mapa -->
     <div class="w-[70%] bg-white rounded-xl shadow p-4 flex flex-col">
-      <h3 class="text-lg font-semibold text-[#253C59] mb-2">Mapa da viagem</h3>
+      <h3 class="text-xl font-semibold text-[#253C59] mb-2">Mapa da Viagem</h3>
       <div class="flex-1 h-[260px] relative rounded-xl overflow-hidden shadow">
         <app-trip-map [schedules]="schedules"></app-trip-map>
       </div>
@@ -71,7 +71,7 @@
   <!-- Carrossel de Fotos -->
   <div class="mt-12">
     <div class="flex items-center justify-between mb-4">
-      <h2 class="text-xl font-semibold text-[#253C59]">Fotos da viagem</h2>
+      <h2 class="text-2xl font-semibold text-[#253C59]">Fotos da Viagem</h2>
       <button class="btn btn-primary flex items-center gap-2" (click)="openUploadModal()">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
@@ -81,15 +81,26 @@
     </div>
 
     <div *ngIf="tripMedias?.length; else noPhotos">
-      <div class="flex overflow-x-auto gap-4 pb-2">
+      <div class="flex gap-4 pb-2">
         <div *ngFor="let media of tripMedias"
-          class="min-w-[220px] rounded-xl shadow p-2 bg-white flex flex-col items-center">
-          <img [src]="'data:image/jpeg;base64,' + media.media" alt="Foto da viagem"
-            class="w-[200px] h-[140px] object-cover rounded-xl mb-1" />
-          <p class="text-sm text-[#253C59]">{{ media.description }}</p>
-          <button class="btn btn-xs btn-error mt-1" (click)="deleteTripMedia(media.id)">
-            Excluir
-          </button>
+          class="relative">
+
+            <div class="w-[220px] rounded-xl shadow bg-white flex flex-col items-center">
+              <img [src]="'data:image/jpeg;base64,' + media.media" alt="Foto da viagem"
+                          class="w-full h-[150px] object-cover rounded-t-xl" />
+              <p class="text-md font-semibold text-center text-[#253C59]">{{ media.description }}</p>
+            </div>
+
+            <button class="btn btn-circle btn-primary absolute -bottom-3 -right-3" (click)="deleteTripMedia(media.id)">
+              <svg fill="#ffffff" viewBox="-3.5 0 19 19" xmlns="http://www.w3.org/2000/svg" class="cf-icon-svg w-2/3">
+                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                <g id="SVGRepo_iconCarrier">
+                  <path d="M11.383 13.644A1.03 1.03 0 0 1 9.928 15.1L6 11.172 2.072 15.1a1.03 1.03 0 1 1-1.455-1.456l3.928-3.928L.617 5.79a1.03 1.03 0 1 1 1.455-1.456L6 8.261l3.928-3.928a1.03 1.03 0 0 1 1.455 1.456L7.455 9.716z"></path>
+                </g>
+              </svg>
+            </button>
+
         </div>
       </div>
     </div>
@@ -137,15 +148,16 @@
 
   <!-- Modal Upload -->
   <dialog id="upload_photo_modal" class="modal">
-    <div class="modal-box flex flex-col items-center">
+    <div class="modal-box flex flex-col items-center justify-between">
       <button type="button" class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" (click)="closeUploadModal()">
         ✕
       </button>
-      <h3 class="text-lg font-bold text-[#253C59] mb-4">Enviar foto</h3>
-      <input type="file" accept="image/*" class="mb-4" (change)="onFileSelected($event)" [disabled]="uploading" />
+      <h3 class="text-xl font-bold text-[#253C59] mb-4">Enviar Foto</h3>
+      <input type="file" accept="image/*" class="file-input file-input-primary mb-4" 
+      (change)="onFileSelected($event)" [disabled]="uploading"/>
 
-      <input type="text" [(ngModel)]="uploadDescription" placeholder="Informe uma descrição da foto"
-        class="input w-full mb-2" [disabled]="uploading" name="description" required maxlength="120" />
+      <input type="text" maxlength="30" [(ngModel)]="uploadDescription" name="description" [disabled]="uploading" required maxlength="120" 
+      class="input w-full bg-white placeholder-[#253C59] text-[#253C59] mb-4" placeholder="Informe a Descrição da Foto" />
 
       <!-- Preview da foto, opcional -->
       <img *ngIf="previewUrl" [src]="previewUrl" alt="Preview"

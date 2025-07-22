@@ -21,12 +21,12 @@ export class DashboardService {
     return this.http.get<DashboardTrip[]>(url);
   }
 
-  getWeather(latitude: number, longitude: number): Observable<Weather> {
+  getWeather(latitude: number, longitude: number): Observable<{ data: Weather }> {
 
     const url = `${this.apiUrl}/weather`;
     const params = { latitude: latitude.toString(), longitude: longitude.toString() };
 
-    return this.http.get<Weather>(url, { params });
+    return this.http.get<{ data: Weather }>(url, { params });
   }
 
   getCurrency(from: string, to: string): Observable<Currency> {

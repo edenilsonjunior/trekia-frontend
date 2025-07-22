@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { CommonModule, NgIf } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { GeocodingService } from '../../services/geocoding-service';
 import { DashboardService } from '../../services/dashboard-service';
@@ -11,10 +11,10 @@ import { DashboardService } from '../../services/dashboard-service';
   imports: [CommonModule, FormsModule],
   styleUrls: ['./weather-card.scss']
 })
-export class WeatherCardComponent {
-  query = '';
+export class WeatherCardComponent implements OnInit {
+  query = 'Araraquara';
   loading = false;
-  city = 'Rio de Janeiro';
+  city = 'Araraquara';
   tempMax?: string;
   tempMin?: string;
   error?: string;
@@ -23,6 +23,10 @@ export class WeatherCardComponent {
     private geocodingService: GeocodingService,
     private dashboardService: DashboardService
   ) {}
+  
+  ngOnInit(): void {
+    this.searchWeather();
+  }
 
   searchWeather() {
     if (!this.query) return;
@@ -40,12 +44,22 @@ export class WeatherCardComponent {
           this.loading = false;
           return;
         }
+
         const result = results[0];
         this.city = result.display_name.split(',')[0];
+
         this.dashboardService.getWeather(+result.lat, +result.lon).subscribe({
-          next: weather => {
-            this.tempMax = weather.maxTempC.toString() ?? '--';
-            this.tempMin = weather.minTempC.toString() ?? '--';
+          next: (weather) => {
+            console.log('Resposta da API:', weather);
+
+            if (!weather || weather.data.maxTempC == null || weather.data.minTempC == null) {
+              this.error = 'Dados de temperatura não disponíveis';
+              this.loading = false;
+              return;
+            }
+
+            this.tempMax = String(weather.data.maxTempC);
+            this.tempMin = String(weather.data.minTempC);
             this.loading = false;
           },
           error: () => {

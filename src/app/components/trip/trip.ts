@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule, formatDate } from '@angular/common';
 import { DashboardService } from '../../services/dashboard-service';
 import { DashboardTrip } from '../../models/dashboard/dashboardTrip';
@@ -13,7 +13,7 @@ import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-trip',
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule],
   templateUrl: './trip.html',
   styleUrl: './trip.scss'
 })
@@ -23,6 +23,13 @@ export class Trip implements OnInit {
   formTrip: FormGroup;
   trips: DashboardTrip[] = [];
   selectedTripIds: number[] = [];
+
+  filters = {
+    title: '',
+    description: '',
+    startDate: '',
+    endDate: ''
+  };
 
   constructor(
     private dashboardService: DashboardService,
@@ -39,6 +46,15 @@ export class Trip implements OnInit {
 
   ngOnInit(): void {
     this.loadTrips();
+  }
+
+  get filteredTrips(): DashboardTrip[] {
+    return this.trips.filter(trip => {
+      return (!this.filters.title || trip.title.toLowerCase().includes(this.filters.title.toLowerCase())) &&
+             (!this.filters.description || trip.description.toLowerCase().includes(this.filters.description.toLowerCase())) &&
+             (!this.filters.startDate || new Date(trip.startDate) >= new Date(this.filters.startDate)) &&
+             (!this.filters.endDate || new Date(trip.endDate) <= new Date(this.filters.endDate));
+    });
   }
 
   loadTrips() {
