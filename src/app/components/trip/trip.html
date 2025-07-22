@@ -69,46 +69,78 @@
   </div>
 </dialog>
 
-<div class="overflow-x-auto py-6">
-  <table class="table">
-    
-    <thead>
-      <tr>
-        <th></th>
-        <th class="text-lg font-bold text-[#253C59]">Título</th>
-        <th class="text-lg font-bold text-[#253C59]">Descrição</th>
-        <th class="text-lg font-bold text-[#253C59]">Data de Chegada</th>
-        <th class="text-lg font-bold text-[#253C59]">Data de Saída</th>
-        <th class="text-lg font-bold text-[#253C59]">Data de Criação</th>
-        <th></th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let trip of trips">
-        <th>
-          <label>
-            <input type="checkbox" class="checkbox" [checked]="selectedTripIds.includes(trip.id)"
-              (change)="toggleTripSelection(trip.id, $event)" />
-          </label>
-        </th>
-        <td>
-          <p class="text-md font-semibold text-[#253C59] cursor-pointer transition hover:underline hover:text-[#7b54fa]"
-            (click)="goToTripDetail(trip.id)">
-            {{ trip.title }}
-          </p>
-        <td>
-          <p class="text-md font-semibold text-[#253C59]">{{ trip.description }}</p>
-        </td>
-        <td>
-          <p class="text-md font-semibold text-[#253C59]">{{ trip.startDate | date:'dd/MM/yyyy' }}</p>
-        </td>
-        <td>
-          <p class="text-md font-semibold text-[#253C59]">{{ trip.endDate | date:'dd/MM/yyyy' }}</p>
-        </td>
-        <td>
-          <p class="text-md font-semibold text-[#253C59]">{{ trip.createdAt | date:'dd/MM/yyyy' }}</p>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</div>
+<section class="bg-white w-full p-4 rounded-xl mt-4">
+  <div class="grid grid-cols-4 gap-4">
+    <fieldset class="fieldset flex flex-col justify-start w-full my-1">
+      <legend class="fieldset-legend text-base text-[#253C59]">Título</legend>
+      <input type="text" placeholder="Filtrar por título" [(ngModel)]="filters.title"
+            class="input input-bordered bg-white w-full max-w-xs" />
+    </fieldset>
+    <fieldset class="fieldset flex flex-col justify-start w-full my-1">
+      <legend class="fieldset-legend text-base text-[#253C59]">Descrição</legend>
+      <input type="text" placeholder="Filtrar por título" [(ngModel)]="filters.description"
+            class="input input-bordered bg-white w-full max-w-xs" />
+    </fieldset>
+    <fieldset class="fieldset flex flex-col justify-start w-full my-1">
+      <legend class="fieldset-legend text-base text-[#253C59]">Data de Chegada</legend>
+      <input type="date" placeholder="Filtrar por título" [(ngModel)]="filters.startDate"
+            class="input input-bordered bg-white w-full max-w-xs" />
+    </fieldset>
+    <fieldset class="fieldset flex flex-col justify-start w-full my-1">
+      <legend class="fieldset-legend text-base text-[#253C59]">Data de Saída</legend>
+      <input type="date" placeholder="Filtrar por título" [(ngModel)]="filters.endDate"
+            class="input input-bordered bg-white w-full max-w-xs" />
+    </fieldset>
+  </div>
+</section>
+
+<section class="bg-white w-full p-4 rounded-xl mt-4">
+  <div class="overflow-x-auto py-6">
+    <table class="table">
+      
+      <thead>
+        <tr>
+          <th></th>
+          <th class="text-lg font-bold text-[#253C59]">Título</th>
+          <th class="text-lg font-bold text-[#253C59]">Descrição</th>
+          <th class="text-lg font-bold text-[#253C59]">Data de Chegada</th>
+          <th class="text-lg font-bold text-[#253C59]">Data de Saída</th>
+          <th class="text-lg font-bold text-[#253C59]">Data de Criação</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let trip of filteredTrips">
+          <th>
+            <label>
+              <input type="checkbox" class="checkbox" [checked]="selectedTripIds.includes(trip.id)"
+                (change)="toggleTripSelection(trip.id, $event)" />
+            </label>
+          </th>
+          <td>
+            <p class="text-md font-semibold text-[#253C59] cursor-pointer transition hover:underline hover:text-primary"
+              (click)="goToTripDetail(trip.id)">
+              {{ trip.title }}
+            </p>
+          <td>
+            <p class="text-md font-semibold text-[#253C59]">{{ trip.description }}</p>
+          </td>
+          <td>
+            <p class="text-md font-semibold text-[#253C59]">{{ trip.startDate | date:'dd/MM/yyyy' }}</p>
+          </td>
+          <td>
+            <p class="text-md font-semibold text-[#253C59]">{{ trip.endDate | date:'dd/MM/yyyy' }}</p>
+          </td>
+          <td>
+            <p class="text-md font-semibold text-[#253C59]">{{ trip.createdAt | date:'dd/MM/yyyy HH:mm:ss' }}</p>
+          </td>
+        </tr>
+        <tr *ngIf="filteredTrips.length === 0">
+          <td colspan="7" class="text-center py-4 text-[#253C59] text-lg opacity-70">
+            Nenhuma viagem encontrada.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
