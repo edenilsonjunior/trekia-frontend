@@ -1,4 +1,7 @@
 <div *ngIf="trip">
+
+  <app-toast [show]="showToast" [message]="toastMessage" [type]="toastType"></app-toast>
+
   <div class="flex justify-between items-center mb-6">
     <div>
       <div class="flex items-center gap-2">

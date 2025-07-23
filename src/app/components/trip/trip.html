@@ -1,5 +1,7 @@
 <h1 class="text-3xl font-bold text-[#253C59]">Viagens</h1>
 
+<app-toast [show]="showToast" [message]="toastMessage" [type]="toastType"></app-toast>
+
 <div class="flex items-end justify-end gap-4">
   @if (selectedTripIds.length) {
     <span class="text-base font-normal text-[#253C59] ml-2">
@@ -168,3 +170,5 @@
     </table>
   </div>
 </section>
+
+

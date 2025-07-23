@@ -1,7 +1,9 @@
 import { Component, Input, AfterViewInit, OnChanges, SimpleChanges, ViewChild, ElementRef } from '@angular/core';
-import * as L from 'leaflet';
-import { DashboardSchedule } from '../../models/dashboard/dashboardSchedule';
 import { CommonModule } from '@angular/common';
+
+import * as L from 'leaflet';
+
+import { DashboardSchedule } from '../../models/dashboard/dashboardSchedule';
 
 @Component({
   selector: 'app-trip-map',

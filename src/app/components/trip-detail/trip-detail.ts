@@ -1,22 +1,26 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { TripService } from '../../services/trip-service';
-import { Trip } from '../../models/trips/trip';
 import { CommonModule } from '@angular/common';
-import { TripMediaService } from '../../services/trip-media-service';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+
+import { ToastComponent } from '../toast/toast';
+import { TripMapComponent } from '../trip-map/trip-map';
+
+import { Trip } from '../../models/trips/trip';
 import { TripMedia } from '../../models/trip-media/tripMedia';
 import { CheckItem } from '../../models/check-items/checkItem';
+import { DashboardSchedule } from '../../models/dashboard/dashboardSchedule';
+
+import { TripMediaService } from '../../services/trip-media-service';
+import { TripService } from '../../services/trip-service';
 import { ScheduleService } from '../../services/schedule-service';
 import { CheckItemService } from '../../services/check-item-service';
-import { TripMapComponent } from '../trip-map/trip-map';
-import { DashboardSchedule } from '../../models/dashboard/dashboardSchedule';
 
 @Component({
   selector: 'app-trip-detail',
   templateUrl: './trip-detail.html',
   styleUrls: ['./trip-detail.scss'],
-  imports: [CommonModule, ReactiveFormsModule, FormsModule, TripMapComponent, RouterLink]
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, TripMapComponent, RouterLink, ToastComponent]
 })
 export class TripDetail implements OnInit {
 
@@ -34,6 +38,10 @@ export class TripDetail implements OnInit {
   previewUrl: string | null = null;
 
   newCheckItemDescription: string = '';
+
+  toastMessage = '';
+  toastType: 'success' | 'error' = 'success';
+  showToast = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -86,9 +94,10 @@ export class TripDetail implements OnInit {
         next: () => {
           this.closeUpdateTripModal();
           this.loadTrip();
+          this.showToastMessage('Viagem atualizada com sucesso!', 'success');
         },
         error: () => {
-          alert('Erro ao atualizar viagem');
+          this.showToastMessage('Erro ao atualizar viagem', 'error');
         }
       });
     }
@@ -98,11 +107,11 @@ export class TripDetail implements OnInit {
     if (!confirm('Tem certeza que deseja excluir esta viagem?')) return;
     this.tripService.deleteTrip(this.tripId).subscribe({
       next: () => {
-        alert('Viagem excluída com sucesso');
+        this.showToastMessage('Viagem excluída com sucesso!', 'success');
         this.router.navigate(['/trips']);
       },
-      error: (err) => {
-        console.error('Erro ao excluir viagens', err);
+      error: () => {
+        this.showToastMessage('Erro ao excluir viagem', 'error');
       }
     });
   }
@@ -182,9 +191,11 @@ export class TripDetail implements OnInit {
         this.selectedFile = undefined;
         this.uploadDescription = '';
         this.previewUrl = null;
+        this.showToastMessage('Foto enviada com sucesso!', 'success');
       },
       error: () => {
         alert('Erro ao enviar foto');
+        this.showToastMessage('Erro ao enviar foto', 'error');
         this.uploading = false;
       }
     });
@@ -195,9 +206,10 @@ export class TripDetail implements OnInit {
     this.tripMediaService.deleteTripMedia(this.tripId, mediaId).subscribe({
       next: () => {
         this.loadTripMedia();
+        this.showToastMessage('Foto excluída com sucesso!', 'success');
       },
       error: () => {
-        alert('Erro ao excluir foto');
+        this.showToastMessage('Erro ao excluir foto', 'error');
       }
     });
   }
@@ -223,9 +235,10 @@ export class TripDetail implements OnInit {
       next: () => {
         this.newCheckItemDescription = '';
         this.loadCheckItems();
+        this.showToastMessage('Checkitem adicionado!', 'success');
       },
       error: () => {
-        alert('Erro ao adicionar checkitem');
+        this.showToastMessage('Erro ao adicionar checkitem', 'error');
       }
     });
   }
@@ -249,9 +262,10 @@ export class TripDetail implements OnInit {
     this.checkItemService.deleteCheckItem(this.tripId, item.id).subscribe({
       next: () => {
         this.loadCheckItems();
+        this.showToastMessage('Checkitem excluído!', 'success');
       },
       error: () => {
-        alert('Erro ao excluir checkitem');
+        this.showToastMessage('Erro ao excluir checkitem', 'error');
       }
     });
   }
@@ -292,5 +306,12 @@ export class TripDetail implements OnInit {
   formatDate(date: string) {
     if (!date) return '';
     return date.split('T')[0];
+  }
+
+  showToastMessage(message: string, type: 'success' | 'error' = 'success') {
+    this.toastMessage = message;
+    this.toastType = type;
+    this.showToast = true;
+    setTimeout(() => this.showToast = false, 3000);
   }
 }

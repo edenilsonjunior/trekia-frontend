@@ -1,19 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule, formatDate } from '@angular/common';
-import { DashboardService } from '../../services/dashboard-service';
-import { DashboardTrip } from '../../models/dashboard/dashboardTrip';
-import { TripService } from '../../services/trip-service';
-import { forkJoin } from 'rxjs';
-import { concatMap, finalize } from 'rxjs/operators';
-import { CreateTripRequest } from '../../models/trips/createTripRequest';
-
 import { Router } from '@angular/router';
+import { ToastComponent } from '../toast/toast';
 
+import { DashboardTrip } from '../../models/dashboard/dashboardTrip';
+import { CreateTripRequest } from '../../models/trips/createTripRequest';
+import { DashboardService } from '../../services/dashboard-service';
+import { TripService } from '../../services/trip-service';
 
 @Component({
   selector: 'app-trip',
-  imports: [CommonModule, ReactiveFormsModule, FormsModule],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, ToastComponent],
   templateUrl: './trip.html',
   styleUrl: './trip.scss'
 })
@@ -23,6 +21,10 @@ export class Trip implements OnInit {
   formTrip: FormGroup;
   trips: DashboardTrip[] = [];
   selectedTripIds: number[] = [];
+
+  toastMessage = '';
+  toastType: 'success' | 'error' = 'success';
+  showToast = false;
 
   filters = {
     title: '',
@@ -51,9 +53,9 @@ export class Trip implements OnInit {
   get filteredTrips(): DashboardTrip[] {
     return this.trips.filter(trip => {
       return (!this.filters.title || trip.title.toLowerCase().includes(this.filters.title.toLowerCase())) &&
-             (!this.filters.description || trip.description.toLowerCase().includes(this.filters.description.toLowerCase())) &&
-             (!this.filters.startDate || new Date(trip.startDate) >= new Date(this.filters.startDate)) &&
-             (!this.filters.endDate || new Date(trip.endDate) <= new Date(this.filters.endDate));
+        (!this.filters.description || trip.description.toLowerCase().includes(this.filters.description.toLowerCase())) &&
+        (!this.filters.startDate || new Date(trip.startDate) >= new Date(this.filters.startDate)) &&
+        (!this.filters.endDate || new Date(trip.endDate) <= new Date(this.filters.endDate));
     });
   }
 
@@ -91,10 +93,12 @@ export class Trip implements OnInit {
           const modal = document.getElementById('my_modal_3') as HTMLDialogElement;
           if (modal) modal.close();
 
+          this.showToastMessage('Viagem adicionada com sucesso!', 'success');
+
         },
         error: (error) => {
           this.alertAll = true;
-          console.error('Erro ao criar viagem', error);
+          this.showToastMessage('Erro ao criar viagem', 'error');
         }
       });
     } else {
@@ -120,14 +124,24 @@ export class Trip implements OnInit {
       next: () => {
         this.loadTrips();
         this.selectedTripIds = [];
+
+        this.showToastMessage('Viagem(ns) excluída(s) com sucesso!', 'success');
+
       },
       error: (err) => {
-        console.error('Erro ao excluir viagens', err);
+        this.showToastMessage('Erro ao excluir viagens', 'error');
       }
     });
   }
 
   goToTripDetail(tripId: number) {
     this.router.navigate(['/trips', tripId]);
+  }
+
+  showToastMessage(message: string, type: 'success' | 'error' = 'success') {
+    this.toastMessage = message;
+    this.toastType = type;
+    this.showToast = true;
+    setTimeout(() => this.showToast = false, 3000);
   }
 }

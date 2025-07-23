@@ -1,0 +1,13 @@
+.custom-alert {
+  background: #fff !important;    
+  color: #253C59;                 
+  border-width: 2px !important;   
+  box-shadow: none !important;
+}
+
+.alert-success.custom-alert {
+  border-color: #22c55e !important; 
+}
+.alert-error.custom-alert {
+  border-color: #ef4444 !important; 
+}

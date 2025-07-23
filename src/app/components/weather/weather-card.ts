@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+
 import { GeocodingService } from '../../services/geocoding-service';
 import { DashboardService } from '../../services/dashboard-service';
 
@@ -50,7 +51,6 @@ export class WeatherCardComponent implements OnInit {
 
         this.dashboardService.getWeather(+result.lat, +result.lon).subscribe({
           next: (weather) => {
-            console.log('Resposta da API:', weather);
 
             if (!weather || weather.data.maxTempC == null || weather.data.minTempC == null) {
               this.error = 'Dados de temperatura não disponíveis';

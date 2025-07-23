@@ -1,19 +1,19 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, RouterLink } from '@angular/router';
+import { CommonModule, DatePipe } from '@angular/common';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+
+import { Sched } from '../../models/schedules/sched';
+import { CreateScheduleRequest } from '../../models/schedules/createScheduleRequest';
+import { ToastComponent } from '../toast/toast';
 import { GeocodingService } from '../../services/geocoding-service';
 import { DashboardService } from '../../services/dashboard-service';
-import { CurrencyCodes } from '../../models/dashboard/currencyCodes';
 import { ScheduleService } from '../../services/schedule-service';
-import { CommonModule, DatePipe } from '@angular/common';
-import { DashboardSchedule } from '../../models/dashboard/dashboardSchedule';
-import { Sched } from '../../models/schedules/sched';
-import { ActivatedRoute, RouterLink } from '@angular/router';
-import { CreateScheduleRequest } from '../../models/schedules/createScheduleRequest';
 import { TripService } from '../../services/trip-service';
 
 @Component({
   selector: 'app-schedule',
-  imports: [ReactiveFormsModule, DatePipe, CommonModule, FormsModule, RouterLink],
+  imports: [ReactiveFormsModule, DatePipe, CommonModule, FormsModule, RouterLink, ToastComponent],
   templateUrl: './schedule.html',
   styleUrl: './schedule.scss'
 })
@@ -34,6 +34,10 @@ export class Schedule implements OnInit {
   locale = '';
   latitude?: number;
   longitude?: number;
+
+  toastMessage = '';
+  toastType: 'success' | 'error' = 'success';
+  showToast = false;
 
   filters = {
     title: '',
@@ -119,6 +123,7 @@ export class Schedule implements OnInit {
           const modal = document.getElementById('my_modal_4') as HTMLDialogElement;
           if (modal) modal.close();
 
+          this.showToastMessage('Erro ao adicionar roteiro', 'error');
         },
         error: () => {
           this.formSchedule.reset()
@@ -164,15 +169,23 @@ export class Schedule implements OnInit {
   deleteSelectedSchedules() {
     if (this.selectedSchedulesIds.length === 0) return;
 
+    let error = false
+
     for (const scheduleId of this.selectedSchedulesIds) {
       this.scheduleService.deleteSchedule(this.tripId, scheduleId).subscribe({
         next: () => {
           this.loadSchedules();
+
         },
         error: (err) => {
-          console.error(`Erro ao excluir roteiro ${scheduleId}`, err);
+          this.showToastMessage(`Erro ao excluir roteiro`, 'error');
+          error = true
         }
       });
+    }
+
+    if (!error) {
+      this.showToastMessage('Roteiro(s) excluído(s) com sucesso!', 'success');
     }
 
     this.selectedSchedulesIds = [];
@@ -209,6 +222,11 @@ export class Schedule implements OnInit {
     });
   }
 
-
+  showToastMessage(message: string, type: 'success' | 'error' = 'success') {
+    this.toastMessage = message;
+    this.toastType = type;
+    this.showToast = true;
+    setTimeout(() => this.showToast = false, 3000);
+  }
 
 }
