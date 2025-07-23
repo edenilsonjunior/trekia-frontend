@@ -30,7 +30,7 @@ export const routes: Routes = [
     children: [
       { path: 'dashboard', component: Dashboard, canActivate: [authGuardGuard] },
       { path: 'trips', component: Trip, canActivate: [authGuardGuard] },
-      { path: 'schedule', component: Schedule, canActivate: [authGuardGuard] },
+      { path: 'trips/:id/schedule', component: Schedule, canActivate: [authGuardGuard] },
       { path: 'trips/:id', component: TripDetail, canActivate: [authGuardGuard] }
     ]
   }

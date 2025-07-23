@@ -1,4 +1,4 @@
-<h1 class="text-3xl font-medium text-[#253C59]">Viagens</h1>
+<h1 class="text-3xl font-bold text-[#253C59]">Viagens</h1>
 
 <div class="flex items-end justify-end gap-4">
   @if (selectedTripIds.length) {
@@ -21,7 +21,7 @@
       ></path>
     </svg>
   </button>
-  <button class="btn btn-primary flex justify-center" onclick="my_modal_3.showModal()">
+  <button class="btn btn-primary flex justify-center" onclick="my_modal_3.showModal()" (click)="this.formTrip.reset(); this.formTrip.markAsPristine(); this.formTrip.markAsUntouched(); this.alertAll = false;">
     Adicionar Viagem
     <svg class="w-6" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
       <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
@@ -47,21 +47,45 @@
         <legend class="fieldset-legend text-base text-[#253C59]">Título</legend>
         <input type="text" formControlName="title" class="input w-full bg-white placeholder-[#253C59] text-[#253C59]"
           placeholder="Digite um título" />
+          @if (
+                (formTrip.get('title')?.invalid && 
+                formTrip.get('title')?.touched) || (formTrip.get('title')?.invalid && alertAll)
+            ) {
+                <p class="text-red-700">Preencha o campo de título corretamente.</p>
+            }
       </fieldset>
       <fieldset class="fieldset flex flex-col justify-start w-full my-1">
         <legend class="fieldset-legend text-base text-[#253C59]">Descrição</legend>
         <input type="text" formControlName="description"
           class="input w-full bg-white placeholder-[#253C59] text-[#253C59]" placeholder="Digite uma descrição" />
+          @if (
+                (formTrip.get('description')?.invalid && 
+                formTrip.get('description')?.touched) || (formTrip.get('description')?.invalid && alertAll)
+            ) {
+                <p class="text-red-700">Preencha o campo de descrição corretamente.</p>
+            }
       </fieldset>
       <fieldset class="fieldset flex flex-col justify-start w-full my-1">
         <legend class="fieldset-legend text-base text-[#253C59]">Data de Chegada</legend>
         <input type="date" formControlName="startDate"
           class="input w-full bg-white placeholder-[#253C59] text-[#253C59]" />
+          @if (
+                (formTrip.get('startDate')?.invalid && 
+                formTrip.get('startDate')?.touched) || (formTrip.get('startDate')?.invalid && alertAll)
+            ) {
+                <p class="text-red-700">Preencha o campo de data de chegada corretamente.</p>
+            }
       </fieldset>
       <fieldset class="fieldset flex flex-col justify-start w-full my-1">
         <legend class="fieldset-legend text-base text-[#253C59]">Data de Saída</legend>
         <input type="date" formControlName="endDate"
           class="input w-full bg-white placeholder-[#253C59] text-[#253C59]" />
+          @if (
+                (formTrip.get('endDate')?.invalid && 
+                formTrip.get('endDate')?.touched) || (formTrip.get('endDate')?.invalid && alertAll)
+            ) {
+                <p class="text-red-700">Preencha o campo de data de saída corretamente.</p>
+            }
       </fieldset>
 
       <button class="btn btn-primary px-6 font-medium text-lg w-full mt-4" type="submit">Enviar</button>
@@ -73,12 +97,12 @@
   <div class="grid grid-cols-4 gap-4">
     <fieldset class="fieldset flex flex-col justify-start w-full my-1">
       <legend class="fieldset-legend text-base text-[#253C59]">Título</legend>
-      <input type="text" placeholder="Filtrar por título" [(ngModel)]="filters.title"
+      <input type="text" placeholder="Filtrar por Título" [(ngModel)]="filters.title"
             class="input input-bordered bg-white w-full max-w-xs" />
     </fieldset>
     <fieldset class="fieldset flex flex-col justify-start w-full my-1">
       <legend class="fieldset-legend text-base text-[#253C59]">Descrição</legend>
-      <input type="text" placeholder="Filtrar por título" [(ngModel)]="filters.description"
+      <input type="text" placeholder="Filtrar por Descrição" [(ngModel)]="filters.description"
             class="input input-bordered bg-white w-full max-w-xs" />
     </fieldset>
     <fieldset class="fieldset flex flex-col justify-start w-full my-1">

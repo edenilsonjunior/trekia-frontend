@@ -39,4 +39,7 @@ export class ScheduleService {
     deleteSchedule(tripId: number, scheduleId: number): Observable<any> {
         return this.http.delete(`${this.apiUrl}/${tripId}/schedules/${scheduleId}`);
     }
+
+    
+    
 }

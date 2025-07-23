@@ -37,10 +37,10 @@ export class DashboardService {
     return this.http.get<Currency>(url, { params });
   }
 
-getCurrencyCodes(): Observable<CurrencyCodes> {
-  const url = `${this.apiUrl}/currencies/codes`;
+  getCurrencyCodes(): Observable<CurrencyCodes> {
+    const url = `${this.apiUrl}/currencies/codes`;
 
-  return this.http.get<CurrencyCodes>(url);
-}
+    return this.http.get<CurrencyCodes>(url);
+  }
 
 }

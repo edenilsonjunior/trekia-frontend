@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { TripService } from '../../services/trip-service';
 import { Trip } from '../../models/trips/trip';
 import { CommonModule } from '@angular/common';
@@ -16,7 +16,7 @@ import { DashboardSchedule } from '../../models/dashboard/dashboardSchedule';
   selector: 'app-trip-detail',
   templateUrl: './trip-detail.html',
   styleUrls: ['./trip-detail.scss'],
-  imports: [CommonModule, ReactiveFormsModule, FormsModule, TripMapComponent]
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, TripMapComponent, RouterLink]
 })
 export class TripDetail implements OnInit {
 
