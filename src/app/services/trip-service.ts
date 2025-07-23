@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { CreateTripRequest } from '../models/trips/createTripRequest';
 import { Trip } from '../models/trips/trip';
+import { UpdateTripRequest } from '../models/trips/updateTripRequest';
 
 
 @Injectable({
@@ -24,8 +25,8 @@ export class TripService {
     return this.http.get<{ data: Trip }>(`${this.apiUrl}/${id}`);
   }
 
-  public UpdateTrip(id: number, UpdateTripRequest: any): Observable<Trip> {
-    return this.http.put<Trip>(`${this.apiUrl}/${id}`, UpdateTripRequest);
+  public UpdateTrip(id: number, trip: UpdateTripRequest): Observable<Trip> {
+    return this.http.put<Trip>(`${this.apiUrl}/${id}`, trip);
   }
 
   public deleteTrip(id: number): Observable<void> {

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { CommonModule } from '@angular/common';
+import { CommonModule, formatDate } from '@angular/common';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { ToastComponent } from '../toast/toast';
@@ -15,6 +15,7 @@ import { TripMediaService } from '../../services/trip-media-service';
 import { TripService } from '../../services/trip-service';
 import { ScheduleService } from '../../services/schedule-service';
 import { CheckItemService } from '../../services/check-item-service';
+import { UpdateTripRequest } from '../../models/trips/updateTripRequest';
 
 @Component({
   selector: 'app-trip-detail',
@@ -86,10 +87,14 @@ export class TripDetail implements OnInit {
 
   updateTrip() {
     if (this.formTrip.valid && this.trip) {
-      const updatedTrip = {
-        ...this.trip,
-        ...this.formTrip.value
+
+      const updatedTrip: UpdateTripRequest = {
+        title: this.formTrip.value.title,
+        description: this.formTrip.value.description,
+        startDate: formatDate(this.formTrip.value.startDate, 'dd/MM/yyyy', 'en-US'),
+        endDate: formatDate(this.formTrip.value.endDate, 'dd/MM/yyyy', 'en-US')
       };
+
       this.tripService.UpdateTrip(this.tripId, updatedTrip).subscribe({
         next: () => {
           this.closeUpdateTripModal();
