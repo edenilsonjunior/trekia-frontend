@@ -1,0 +1,33 @@
+<h1 class="text-3xl font-bold text-[#253C59]">Minhas Viagens</h1>
+
+<section class="flex flex-col gap-8 py-6">
+  <div class="flex flex-row justify-between items-strech bg-[#F7F6F3] rounded-2xl p-6 gap-6 shadow-sm w-full h-80">
+    
+    <div class="flex flex-col justify-between w-1/4">
+      <div>
+        <img [src]="tripCard.mediaBase64 ? 'data:image/jpeg;base64,' + tripCard.mediaBase64 : 'assets/default-image.png'"
+          alt="Destino"
+          class="rounded-xl object-cover w-full h-50" 
+        />
+      </div>
+      <div class="flex flex-col items-center gap-2">
+        <div class="text-2xl font-semibold text-[#253C59] text-center">
+          {{ tripCard.title }} 
+        </div>
+        <div class="text-xs text-[#888] font-medium text-center">
+          {{ tripCard.startDate | date:'dd/MM/yyyy' }} - {{ tripCard.endDate | date:'dd/MM/yyyy' }}
+        </div>
+      </div>
+    </div>
+
+    <div class="flex-1 relative rounded-xl overflow-hidden shadow w-3/4">
+      <app-trip-map [schedules]="tripCard.schedules"></app-trip-map>
+    </div>
+  </div>
+</section>
+
+<h1 class="text-3xl font-bold text-[#253C59] mt-6">Utilitários</h1>
+<section class="flex gap-8 pt-6">
+  <app-weather-card></app-weather-card>
+  <app-currency-card></app-currency-card>
+</section>

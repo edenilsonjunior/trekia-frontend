@@ -1,0 +1,65 @@
+<aside class="h-screen w-1/5 bg-secondary fixed inset-y-0 left-0 p-8 flex flex-col justify-between">
+
+    <div>
+        <div class="flex justify-center">
+            <img src="assets/trekia-white-logo.png" alt="trekia-white-logo" class="w-40">
+        </div>
+    
+        <div>
+            <hr class="text-white my-4">
+            <div class="flex flex-col 2xl:flex-row items-center gap-1 2xl:gap-4 px-4">
+                <img src="assets/avatar-home-22.png" alt="avatar-home-22" class="rounded-full w-12">
+                <div class="px-4 2xl:px-0">
+                  <p class="text-white text-center 2xl:text-start text-lg font-medium">{{ userName }}</p>
+                  <p class="text-white opacity-75 text-sm font-medium">{{ userEmail }}</p>
+                </div>
+            </div>
+            <hr class="text-white my-4">
+        </div>
+    
+        <div class="my-8">
+            <ul>
+                <li>
+                    <a
+                    routerLink="/dashboard"
+                    routerLinkActive="bg-primary"
+                    class="block h-[42px] px-4 flex items-center text-white text-lg font-medium rounded-xl hover:bg-[#EBBFBF]"
+                    >
+                    Dashboard
+                    </a>
+                </li>
+                <li>
+                    <a
+                    routerLink="/trips"
+                    routerLinkActive="bg-primary"
+                    class="block h-[42px] px-4 flex items-center text-white text-lg font-medium rounded-xl hover:bg-[#EBBFBF] mt-2"
+                    >
+                    Viagens
+                    </a>
+                </li>
+            </ul>
+        </div>    
+    </div>
+    
+    <div>
+        <hr class="text-white my-4">
+        <ul>
+            <li>
+                <a
+                class="block h-[42px] px-4 flex items-center text-white text-lg font-medium rounded-xl hover:bg-[#EBBFBF] mt-2 cursor-pointer"
+                (click)="logout()"
+                >
+                Sair
+                </a>
+            </li>
+        </ul>    
+    </div>
+
+</aside>
+
+<div class="w-4/5 ml-[20%]">
+    <div class="p-10">
+        <router-outlet></router-outlet>
+    </div>
+</div>
+
