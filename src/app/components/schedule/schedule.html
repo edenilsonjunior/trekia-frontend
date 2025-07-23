@@ -1,7 +1,23 @@
-<h1 class="text-3xl font-medium text-[#253C59]">Roteiros</h1>
+<div class="flex items-center gap-2">
+  <div [routerLink]="['../']">
+    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-12 cursor-pointer pt-1" >
+      <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+      <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+      <g id="SVGRepo_iconCarrier"> 
+        <path d="M6 12H18M6 12L11 7M6 12L11 17" stroke="#253C59" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> 
+      </g>
+    </svg>
+  </div>
+  <h1 class="text-3xl font-medium text-[#253C59]">Roteiros de {{ tripName }}</h1>
+</div>
 
-<div class="flex justify-end gap-4">
-  <button class="btn btn-primary flex justify-center">
+<div class="flex items-end justify-end gap-4">
+  @if (selectedSchedulesIds.length) {
+    <span class="text-base font-normal text-[#253C59] ml-2">
+      ({{ selectedSchedulesIds.length }} selecionado{{ selectedSchedulesIds.length === 1 ? '' : 's' }})
+    </span>
+  }
+  <button class="btn btn-primary flex justify-center" (click)="deleteSelectedSchedules()">
     Excluir Roteiro
     <svg class="w-6" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
       <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
@@ -13,7 +29,7 @@
       </g>
     </svg>
   </button>
-  <button class="btn btn-primary flex justify-center" onclick="my_modal_3.showModal()">
+  <button class="btn btn-primary flex justify-center" onclick="my_modal_4.showModal()">
     Adicionar Roteiro
     <svg class="w-6" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
       <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
@@ -28,126 +44,145 @@
   </button>
 </div>
 
-<dialog id="my_modal_3" class="modal">
+<dialog id="my_modal_4" class="modal">
   <div class="modal-box">
     <form method="dialog">
       <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
     </form>
     <h3 class="text-xl font-bold text-[#253C59] mb-2">Adicione seu roteiro</h3>
+    <fieldset class="flex flex-col justify-start w-full my-1">
+      <legend class="fieldset-legend text-base text-[#253C59]">Localização</legend>
+      <div class="join w-full">
+        <div class="w-full">
+          <label class="input join-item bg-white w-full">
+              <svg class="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <g
+                  stroke-linejoin="round"
+                  stroke-linecap="round"
+                  stroke-width="2.5"
+                  fill="none"
+                  stroke="currentColor"
+                >
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <path d="m21 21-4.3-4.3"></path>
+                </g>
+              </svg>
+              <input type="search" placeholder="Escolha um local" class="w-full" class="bg-white" required [(ngModel)]="query" (keyup.enter)="searchLocation()"/>
+          </label>
+        </div>
+          <button class="btn btn-secondary join-item w-1/4" (click)="searchLocation()"
+            [disabled]="loading">{{ loading ? 'Pesquisando...' : 'Pesquisar' }}
+          </button>
+      </div>
+      @if (
+          searchLocaleError || (searchLocaleError && alertAll)
+      ) {
+        <p class="text-red-700 text-xs">Preencha o campo de localização corretamente.</p>
+      }
+    </fieldset>
     <form [formGroup]="formSchedule" (ngSubmit)="onSubmit()">
       <fieldset class="fieldset flex flex-col justify-start w-full my-1">
         <legend class="fieldset-legend text-base text-[#253C59]">Título</legend>
         <input type="text" formControlName="title" class="input w-full bg-white placeholder-[#253C59] text-[#253C59]"
           placeholder="Digite um título" />
+        @if (
+            (formSchedule.get('title')?.invalid && 
+            formSchedule.get('title')?.touched) || (formSchedule.get('title')?.invalid && alertAll)
+        ) {
+            <p class="text-red-700">Preencha o campo de título corretamente.</p>
+        }
       </fieldset>
       <fieldset class="fieldset flex flex-col justify-start w-full my-1">
         <legend class="fieldset-legend text-base text-[#253C59]">Descrição</legend>
         <input type="text" formControlName="description"
           class="input w-full bg-white placeholder-[#253C59] text-[#253C59]" placeholder="Digite uma descrição" />
+        @if (
+            (formSchedule.get('description')?.invalid && 
+            formSchedule.get('description')?.touched) || (formSchedule.get('description')?.invalid && alertAll)
+        ) {
+            <p class="text-red-700">Preencha o campo de descrição corretamente.</p>
+        }
       </fieldset>
       <fieldset class="flex flex-col justify-start w-full my-1">
         <legend class="fieldset-legend text-base text-[#253C59]">Moeda Local</legend>
         <select formControlName="currencyCode" class="select w-full bg-white text-[#253C59]">
           <option disabled selected>Selecione uma moeda</option>
-          <option *ngFor="let code of currencyCodes" [value]="code">{{ code }}</option>
+          <option *ngFor="let option of currencyOptions" [value]="option.code">{{ option.label }}</option>
         </select>
+        @if (
+            (formSchedule.get('currencyCode')?.invalid && 
+            formSchedule.get('currencyCode')?.touched) || (formSchedule.get('currencyCode')?.invalid && alertAll)
+        ) {
+            <p class="text-red-700 text-xs">Preencha o campo de moeda local corretamente.</p>
+        }
       </fieldset>
-      <fieldset class="fieldset flex flex-col justify-start w-full my-1">
-        <legend class="fieldset-legend text-base text-[#253C59]">Local</legend>
-        <input type="text" formControlName="locale" class="input w-full bg-white placeholder-[#253C59] text-[#253C59]"
-          placeholder="Digite uma descrição" />
-      </fieldset>
-
       <button class="btn btn-primary px-6 font-medium text-lg w-full mt-4" type="submit">Enviar</button>
     </form>
   </div>
 </dialog>
 
-<div class="overflow-x-auto py-6">
-  <table class="table">
-    <!-- head -->
-    <thead>
-      <tr>
-        <th></th>
-        <th class="text-lg font-bold text-[#253C59]">Título</th>
-        <th class="text-lg font-bold text-[#253C59]">Descrição</th>
-        <th class="text-lg font-bold text-[#253C59]">Data de Chegada</th>
-        <th class="text-lg font-bold text-[#253C59]">Data de Saída</th>
-        <th class="text-lg font-bold text-[#253C59]">Data de Criação</th>
-        <th></th>
-      </tr>
-    </thead>
-    <tbody>
-      <!-- row 1 -->
-      <tr>
-        <th>
-          <label>
-            <input type="checkbox" class="checkbox" />
-          </label>
-        </th>
-        <td>
-          <p class="text-md font-semibold text-[#253C59]">Viagem para o Rio de Janeiro</p>
-        </td>
-        <td>
-          <p class="text-md font-semibold text-[#253C59]">Viagem com amigos para conhecer os principais pontos
-            turísticos do Rio de Janeiro</p>
-        </td>
-        <td>
-          <p class="text-md font-semibold text-[#253C59]">11/11/2026</p>
-        </td>
-        <th>
-          <p class="text-md font-semibold text-[#253C59]">26/11/2026</p>
-        </th>
-        <th>
-          <p class="text-md font-semibold text-[#253C59]">15/07/2025 - 17:15</p>
-        </th>
-      </tr>
-      <tr>
-        <th>
-          <label>
-            <input type="checkbox" class="checkbox" />
-          </label>
-        </th>
-        <td>
-          <p class="text-md font-semibold text-[#253C59]">Viagem para o Rio de Janeiro</p>
-        </td>
-        <td>
-          <p class="text-md font-semibold text-[#253C59]">Viagem com amigos para conhecer os principais pontos
-            turísticos do Rio de Janeiro</p>
-        </td>
-        <td>
-          <p class="text-md font-semibold text-[#253C59]">11/11/2026</p>
-        </td>
-        <th>
-          <p class="text-md font-semibold text-[#253C59]">26/11/2026</p>
-        </th>
-        <th>
-          <p class="text-md font-semibold text-[#253C59]">15/07/2025 - 17:15</p>
-        </th>
-      </tr>
-      <tr>
-        <th>
-          <label>
-            <input type="checkbox" class="checkbox" />
-          </label>
-        </th>
-        <td>
-          <p class="text-md font-semibold text-[#253C59]">Viagem para o Rio de Janeiro</p>
-        </td>
-        <td>
-          <p class="text-md font-semibold text-[#253C59]">Viagem com amigos para conhecer os principais pontos
-            turísticos do Rio de Janeiro</p>
-        </td>
-        <td>
-          <p class="text-md font-semibold text-[#253C59]">11/11/2026</p>
-        </td>
-        <th>
-          <p class="text-md font-semibold text-[#253C59]">26/11/2026</p>
-        </th>
-        <th>
-          <p class="text-md font-semibold text-[#253C59]">15/07/2025 - 17:15</p>
-        </th>
-      </tr>
-    </tbody>
-  </table>
-</div>
+<section class="bg-white w-full p-4 rounded-xl mt-4">
+  <div class="grid grid-cols-4 gap-4">
+    <fieldset class="fieldset flex flex-col justify-start w-full my-1">
+      <legend class="fieldset-legend text-base text-[#253C59]">Título</legend>
+      <input type="text" placeholder="Filtrar por Título" [(ngModel)]="filters.title"
+            class="input input-bordered bg-white w-full max-w-xs" />
+    </fieldset>
+    <fieldset class="fieldset flex flex-col justify-start w-full my-1">
+      <legend class="fieldset-legend text-base text-[#253C59]">Descrição</legend>
+      <input type="text" placeholder="Filtrar por Descrição" [(ngModel)]="filters.description"
+            class="input input-bordered bg-white w-full max-w-xs" />
+    </fieldset>
+    <fieldset class="fieldset flex flex-col justify-start w-full my-1">
+      <legend class="fieldset-legend text-base text-[#253C59]">Moeda Local</legend>
+      <input type="text" placeholder="Filtrar por Moeda Local" [(ngModel)]="filters.currencyCode"
+            class="input input-bordered bg-white w-full max-w-xs" />
+    </fieldset>
+  </div>
+</section>
+
+<section class="bg-white w-full p-4 rounded-xl mt-4">
+  <div class="overflow-x-auto py-6">
+    <table class="table">
+      
+      <thead>
+        <tr>
+          <th></th>
+          <th class="text-lg font-bold text-[#253C59]">Título</th>
+          <th class="text-lg font-bold text-[#253C59]">Descrição</th>
+          <th class="text-lg font-bold text-[#253C59]">Moeda Local</th>
+          <th class="text-lg font-bold text-[#253C59]">Data de Criação</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let schedule of filteredSchedules">
+          <th>
+            <label>
+              <input type="checkbox" class="checkbox" [checked]="selectedSchedulesIds.includes(schedule.id)"
+                (change)="toggleScheduleSelection(schedule.id, $event)" />
+            </label>
+          </th>
+          <td>
+            <p class="text-md font-semibold text-[#253C59]">
+              {{ schedule.title }}
+            </p>
+          <td>
+            <p class="text-md font-semibold text-[#253C59]">{{ schedule.description }}</p>
+          </td>
+          <td>
+            <p class="text-md font-semibold text-[#253C59]">{{ schedule.currencyCode }}</p>
+          </td>
+          <td>
+            <p class="text-md font-semibold text-[#253C59]">{{ schedule.plannedAt | date:'dd/MM/yyyy HH:mm:ss' }}</p>
+          </td>
+        </tr>
+        <tr *ngIf="filteredSchedules.length === 0">
+          <td colspan="7" class="text-center py-4 text-[#253C59] text-lg opacity-70">
+            Nenhum roteiro encontrado.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
